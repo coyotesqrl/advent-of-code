@@ -12,5 +12,5 @@
   ([] (clerk ["src/coyotesqrl/2021/"]))
   ([paths] (clerk/serve! {:browse? true :watch-paths paths})))
 
-(defn show [f]
-  (clerk/show! f))
+(defn clerk-show [y d]
+  (clerk/show! (format "src/coyotesqrl/%d/day%d.clj" y d)))
