@@ -9,7 +9,7 @@
        (p/open {:launcher l}))))
 
 (defn clerk
-  ([] (clerk ["src"]))
+  ([] (clerk ["src/coyotesqrl/2021/core.clj"]))
   ([paths] (clerk/serve! {:browse? true :watch-paths paths})))
 
 (defn show [f]
