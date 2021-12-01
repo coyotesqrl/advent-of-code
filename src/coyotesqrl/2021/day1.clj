@@ -1,6 +1,6 @@
-;; # Advent of Code 2021
-(ns coyotesqrl.2021.core
-  (:require [coyotesqrl.2021.utils :as utils]))
+;; ## Advent of Code 2021
+(ns coyotesqrl.2021.day1
+  (:require [coyotesqrl.utils :as utils]))
 
 ;; ### Day 1
 ;; Input as long sequence
@@ -32,5 +32,3 @@
      (partition 2 1 [0])
      (filter (fn [[a b]] (< a b)))
      count)
-
-;; ---

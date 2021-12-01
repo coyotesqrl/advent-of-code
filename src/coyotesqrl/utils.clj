@@ -1,4 +1,4 @@
-(ns coyotesqrl.2021.utils
+(ns coyotesqrl.utils
   (:require [clojure.java.io :as io]))
 
 (defn input->seq
