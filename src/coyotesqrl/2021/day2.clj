@@ -24,10 +24,10 @@
   (let [pos [0 0]]
     (->> (reduce (fn [a v]
                    (let [[dir amt] v]
-                     (cond
-                       (= dir "forward") (update a 0 #(+ amt %))
-                       (= dir "down") (update a 1 #(+ amt %))
-                       (= dir "up") (update a 1 #(- % amt)))))
+                     (case dir
+                       "forward" (update a 0 + amt)
+                       "down" (update a 1 + amt)
+                       "up" (update a 1 - amt))))
                  pos
                  input)
          (apply *))))
@@ -47,11 +47,12 @@
   (let [pos [0 0 0]]
     (->> (reduce (fn [a v]
                    (let [[dir amt] v]
-                     (cond
-                       (= dir "forward") (-> (update a 0 #(+ amt %))
-                                             (update 1 #(+ % (* (nth a 2) amt))))
-                       (= dir "down") (update a 2 #(+ amt %))
-                       (= dir "up") (update a 2 #(- % amt)))))
+                     (case dir
+                       "forward" (-> a
+                                     (update 0 + amt)
+                                     (update 1 + (* (nth a 2) amt)))
+                       "down" (update a 2 + amt)
+                       "up" (update a 2 - amt))))
                  pos
                  input)
          (drop-last)
