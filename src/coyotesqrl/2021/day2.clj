@@ -59,3 +59,31 @@
          (apply *))))
 
 (move-sub-better day2-input)
+
+;; ---
+
+;; #### S-expr solution to the naive case (which actually doesn't suck)
+;; Borkdude half-joked...
+;; > I considered making the most hacky version for 2 day by rewriting the input to s-expressions,
+;; > `(forward 2)`, etc and then making functions for `forward`, etc so I could just run the program. ;)
+(def day2-sexpr (->> (utils/input->seq "coyotesqrl/2021/day2-input.txt")
+                     (map #(str "(" % ")"))))
+
+(defn forward [x]
+  (fn [[hor ver]]
+    [(+ hor x) ver]))
+
+(defn up [x]
+  (fn [[hor ver]]
+    [hor (- ver x)]))
+
+(defn down [x]
+  (fn [[hor ver]]
+    [hor (+ ver x)]))
+
+(let [pos [0 0]]
+  (->> (reduce (fn [a v]
+                 ((eval (read-string v)) a))
+               pos
+               day2-sexpr)
+       (apply *)))
