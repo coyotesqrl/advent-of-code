@@ -1,8 +1,8 @@
 ;; ## Advent of Code 2021
+;; ### Day 3
 (ns coyotesqrl.2021.day3
   (:require [coyotesqrl.utils :as utils]))
 
-;; ### Day 3
 ;; Input
 (def day3-input (utils/input->seq "coyotesqrl/2021/day3-input.txt"))
 

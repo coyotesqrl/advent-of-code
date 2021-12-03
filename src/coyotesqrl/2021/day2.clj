@@ -1,9 +1,9 @@
 ;; ## Advent of Code 2021
+;; ### Day 2
 (ns coyotesqrl.2021.day2
   (:require [coyotesqrl.utils :as utils]
             [clojure.string :as str]))
 
-;; ### Day 2
 ;; Input as direction & distance
 (def day2-input (->> (utils/input->seq "coyotesqrl/2021/day2-input.txt")
                      (map #(str/split % #"\s"))

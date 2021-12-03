@@ -1,5 +1,6 @@
 (ns user
-  (:require [nextjournal.clerk :as clerk]
+  (:require [clojure.java.io :as io]
+            [nextjournal.clerk :as clerk]
             [portal.api :as p]))
 
 (defn portal
@@ -14,3 +15,15 @@
 
 (defn clerk-show [y d]
   (clerk/show! (format "src/coyotesqrl/%d/day%d.clj" y d)))
+
+(defn clerk-static [y]
+  (let [paths (->> y
+                   (format "src/coyotesqrl/%d")
+                   (io/file)
+                   file-seq
+                   (filter #(.isFile %))
+                   (map #(.getPath %)))]
+    (prn (vector paths))
+    (clerk/build-static-app! {:paths paths
+                              :out-path (format "doc/%d" y y)})))
+

@@ -1,8 +1,8 @@
 ;; ## Advent of Code 2021
+;; ### Day 1
 (ns coyotesqrl.2021.day1
   (:require [coyotesqrl.utils :as utils]))
 
-;; ### Day 1
 ;; Input as long sequence
 (def day1-input (->> (utils/input->seq "coyotesqrl/2021/day1-input.txt")
                      (map #(Long/parseLong %))))
