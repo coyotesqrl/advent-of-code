@@ -15,6 +15,7 @@
      (filter (fn [[a b]] (< a b)))
      count)
 
+;; ---
 ;; #### Part 2
 ;; Instead, consider sums of a three-measurement sliding window.
 ;; Again considering the above example:
