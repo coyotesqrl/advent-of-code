@@ -1,4 +1,4 @@
 # coyotesqrl/advent-of-code
 
 ## Solutions...
-* [2021](doc/2021)
+* [2021](https://coyotesqrl.github.io/advent-of-code/2021)
