@@ -41,11 +41,9 @@
 (defn boards [in]
   (->> in
        rest
-       (partition-by #(str/blank? %))
-       (remove #(= 1 (count %)))
-       flatten
-       (map #(str/split % #" "))
-       (map (fn [l] (remove #(str/blank? %) l)))
+       (remove str/blank?)
+       (map str/trim)
+       (map #(str/split % #"\s+"))
        (map (fn [l] (map #(Integer/parseInt %) l)))
        (partition 5)
        (map flatten)
@@ -54,11 +52,15 @@
 (defn process-number
   "Process one board with a called number."
   [b n]
-  (let [matches (->> (filter (fn [m] (contains? m n)) b)
-                     (map #(get % n)))]
-    (with-meta b {:matches (into matches (:matches (meta b)))})))
+  (if-let [matches (->> b
+                        (filter #(contains? % n))
+                        (map #(get % n)))]
+    (with-meta b {:matches (into matches (:matches (meta b)))})
+    b))
 
 (defn check-board
+  "Checks each row and column of the board to find if one is filled, by looking at the metadata
+  carried along with each board."
   [b]
   (let [m (set (:matches (meta b)))
         rows (for [r (range 5 26 5)]
@@ -70,11 +72,10 @@
          not-empty)))
 
 (defn sum-unmatched [b]
-  (let [found (:matches (meta b))]
+  (let [found (:matches (meta b))
+        red #(reduce-kv (fn [_ k v] [v k]) nil %)]
     (->> b
-         (map keys)
-         flatten
-         (map-indexed list)
+         (map red)
          (remove (fn [[k _]] (contains? (set found) k)))
          (map second)
          (apply +))))
@@ -127,4 +128,8 @@
         (recur (map #(process-number % num) matched)
                (rest to-call))))))
 
+;; Looking at my solutions, I am reasonably certain that `boards->first-winner`,
+;; `boards->last-winner`, and `complete-board` could be merged into a singular function to find
+;; first, last, and potentially nth matching board. I don't see it at the moment, but I'm sure I
+;; could find it with a bit of distance.
 (boards->last-winner (boards day4-input) (called-numbers day4-input))
