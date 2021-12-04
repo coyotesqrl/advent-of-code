@@ -36,25 +36,28 @@
        (> o z) \1
        :else default))))
 
-(defn make-mask [n]
-  (Long/parseLong (->> (repeat "1")
-                       (take n)
-                       (apply str))
-                  2))
+(defn most-common-columns
+  "Breaks input strings into vectors of one-character strings,
+  rotates matrix,
+  counts 0s and 1s,
+  and finally returns a vector of the most common value in each column."
+  [in]
+  (->> in
+       (map #(apply vector %))
+       (apply map vector)
+       (map frequencies)
+       (map max-val)))
+
+(defn invert [n]
+  (let [mask-str (apply str (take (Integer/bitCount n) (repeat "1")))
+        mask (Long/parseLong mask-str 2)]
+    (bit-and mask (bit-not n))))
 
 (defn epsilon [in]
-  (Long/parseLong (->> in
-                       (map #(apply vector %))
-                       (apply map vector)
-                       (map frequencies)
-                       (map #(max-val %))
-                       (apply str))
-                  2))
+  (Long/parseLong (apply str (most-common-columns in)) 2))
 
-(let [bin-len (count (first day3-input))
-      mask (make-mask bin-len)
-      eps (epsilon day3-input)
-      gam (bit-and mask (bit-not eps))]
+(let [eps (epsilon day3-input)
+      gam (invert eps)]
   (* eps gam))
 
 ;; ---
@@ -81,12 +84,7 @@
 ;;   with a 0 in the position being considered.
 
 (defn max-nth [in n]
-  (nth (->> in
-            (map #(apply vector %))
-            (apply map vector)
-            (map frequencies)
-            (map max-val))
-       n))
+  (nth (most-common-columns in) n))
 
 (defn air-raters [f in n]
   (let [max-n (max-nth in n)]
