@@ -16,9 +16,8 @@
       (bb/run-task [:kondo])
       (bb/run-task [:fmt-check])))
 
-(defn ci "Run the CI pipeline of tests (and build the uberjar)." [opts]
+(defn ci "Run the static tools, tests, and generate static site pages." [opts]
   (-> opts
       static
       (bb/run-tests)
-      (bb/clean)
-      (bb/uber)))
+      (bb/run-task [:static-gen])))

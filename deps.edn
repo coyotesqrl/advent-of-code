@@ -23,6 +23,9 @@
   :fmt-fix   {:extra-deps {cljfmt/cljfmt {:mvn/version "0.8.0"}}
               :main-opts ["-m" "cljfmt.main" "fix" "src" "test"]}
 
+  :static-gen {:extra-paths ["build"]
+               :main-opts   ["-m" "static-gen" "2021"]}
+
   :build {:deps {io.github.seancorfield/build-clj
                  {:git/tag "v0.6.0" :git/sha "2451bea"}}
           :ns-default build}
