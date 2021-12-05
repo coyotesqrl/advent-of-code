@@ -67,9 +67,10 @@
                (set/select #(< (- r 6) % r) m))
         cols (for [c (range 0 5)]
                (set/select #(= c (mod % 5)) m))]
-    (->> (into rows cols)
-         (filter #(= 5 (count %)))
-         not-empty)))
+    (> (->> (into rows cols)
+            (filter #(= 5 (count %)))
+            count)
+       0)))
 
 (defn sum-unmatched [b]
   (let [found (:matches (meta b))
@@ -80,23 +81,23 @@
          (map second)
          (apply +))))
 
-(defn boards->first-winner
-  [boards to-call]
-  (loop [boards boards
-         last-called nil
-         to-call to-call]
-    (let [num (first to-call)
-          matched (->> boards
-                       (filter check-board)
-                       not-empty)]
-      (if (some? matched)
-        [(first matched) last-called]
-        (recur (map #(process-number % num) boards)
-               num
-               (rest to-call))))))
+(defn boards->nth-winner
+  [boards to-call n]
+  (loop [[num & to-call] to-call
+         boards boards
+         fnd-cnt -1]
+    (let [{done true not-done false} (->> boards
+                                          (map #(process-number % num))
+                                          (group-by check-board))]
+      (if (>= (+ fnd-cnt (count done)) n)
+        (* num (sum-unmatched (nth done (- n fnd-cnt 1))))
+        (recur to-call
+               not-done
+               (+ fnd-cnt (count done)))))))
 
-(let [[b n] (boards->first-winner (boards day4-input) (called-numbers day4-input))]
-  (* n (sum-unmatched b)))
+(boards->nth-winner (boards day4-input)
+                    (called-numbers day4-input)
+                    0)
 
 ;; ---
 ;; #### Part 2
@@ -107,29 +108,6 @@
 ;; that one. That way, no matter which boards it picks, it will win for sure.
 ;;
 ;; Figure out which board will win last. Once it wins, what would its final score be?
-(defn complete-board [b to-call]
-  (reduce (fn [a v]
-            (let [a (process-number a v)]
-              (if (check-board a)
-                (reduced (* v (sum-unmatched a)))
-                a)))
-          b
-          to-call))
-
-(defn boards->last-winner
-  [boards to-call]
-  (loop [boards boards
-         to-call to-call]
-    (let [num (first to-call)
-          matched (->> boards
-                       (remove check-board))]
-      (if (= 1 (count matched))
-        (complete-board (first matched) (rest to-call))
-        (recur (map #(process-number % num) matched)
-               (rest to-call))))))
-
-;; Looking at my solutions, I am reasonably certain that `boards->first-winner`,
-;; `boards->last-winner`, and `complete-board` could be merged into a singular function to find
-;; first, last, and potentially nth matching board. I don't see it at the moment, but I'm sure I
-;; could find it with a bit of distance.
-(boards->last-winner (boards day4-input) (called-numbers day4-input))
+(boards->nth-winner (boards day4-input)
+                    (called-numbers day4-input)
+                    99)
