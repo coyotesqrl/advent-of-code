@@ -35,6 +35,10 @@
   (->> in
        (filter (fn [[[st-x st-y] [en-x en-y]]] (or (= st-x en-x) (= st-y en-y))))))
 
+;; Turns out, I'm just slow. Instead of all this, could have used `range` for all cases. I had
+;; initially used it for the degenerate horizontal and vertical cases but not for the diagonal. All
+;; I had to do with the diagonal was invoke
+;; `(map vector x-range y-range)`
 (defn pts->line [[[st-x st-y] [en-x en-y]]]
   (let [move-fn (fn [st en] (cond
                               (= st en) identity
