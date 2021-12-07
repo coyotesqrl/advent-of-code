@@ -33,7 +33,7 @@
 ;; a certain number of days left. Inverting the problem thusly removed all the exponential
 ;; processing.
 (defn one-day [fs]
-  (letfn [(updater [o v] (if (nil? o) v (+ v o)))]
+  (letfn [(updater [o v] (if (nil? o) v (+' v o)))]
     (reduce (fn [a [k v]]
               (if (zero? k)
                 (-> (update a 6 updater v)
@@ -54,10 +54,10 @@
         m (into {} (for [x [1 2 3 4 5]]
                      {x (->> (offset->generation x d)
                              vals
-                             (apply +))}))]
+                             (apply +'))}))]
     (->> m
-         (map (fn [[k v]] (* v (get freq k 0))))
-         (apply +))))
+         (map (fn [[k v]] (*' v (get freq k 0))))
+         (apply +'))))
 
 (generate-all-fish day6-input 80)
 
