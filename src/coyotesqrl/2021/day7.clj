@@ -2,14 +2,10 @@
 ;; ### Day 7
 (ns coyotesqrl.2021.day7
   (:require [coyotesqrl.utils :as utils]
-            [clojure.math.numeric-tower :as math]
-            [clojure.string :as str]))
+            [clojure.math.numeric-tower :as math]))
 
 ;; ##### Input
-(def day7-input (mapv #(Long/parseLong %)
-                      (-> (utils/input->seq "coyotesqrl/2021/day7-input.txt")
-                          first
-                          (str/split #","))))
+(def day7-input (utils/input->one-line-numeric "coyotesqrl/2021/day7-input.txt"))
 
 ;; #### Part 1
 ;; A giant whale has decided your submarine is its next meal, and it's much faster than you are.

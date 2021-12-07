@@ -1,14 +1,10 @@
 ;; ## Advent of Code 2021
 ;; ### Day 6
 (ns coyotesqrl.2021.day6
-  (:require [coyotesqrl.utils :as utils]
-            [clojure.string :as str]))
+  (:require [coyotesqrl.utils :as utils]))
 
 ;; ##### Input
-(def day6-input (mapv #(Long/parseLong %)
-                      (-> (utils/input->seq "coyotesqrl/2021/day6-input.txt")
-                          first
-                          (str/split #","))))
+(def day6-input (utils/input->one-line-numeric "coyotesqrl/2021/day6-input.txt"))
 
 ;; #### Part 1
 ;; A massive school of glowing lanternfish swims past. They must spawn quickly to reach such large
