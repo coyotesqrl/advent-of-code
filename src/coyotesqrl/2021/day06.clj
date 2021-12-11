@@ -1,6 +1,6 @@
 ;; ## Advent of Code 2021
 ;; ### Day 6
-(ns coyotesqrl.2021.day6
+(ns coyotesqrl.2021.day06
   (:require [coyotesqrl.utils :as utils]))
 
 ;; ##### Input

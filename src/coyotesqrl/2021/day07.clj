@@ -1,6 +1,6 @@
 ;; ## Advent of Code 2021
 ;; ### Day 7
-(ns coyotesqrl.2021.day7
+(ns coyotesqrl.2021.day07
   (:require [coyotesqrl.utils :as utils]
             [clojure.math.numeric-tower :as math]))
 

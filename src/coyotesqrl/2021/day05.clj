@@ -1,6 +1,6 @@
 ;; ## Advent of Code 2021
 ;; ### Day 5
-(ns coyotesqrl.2021.day5
+(ns coyotesqrl.2021.day05
   (:require [coyotesqrl.utils :as utils]
             [clojure.string :as str]))
 
