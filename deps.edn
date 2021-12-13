@@ -1,7 +1,7 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.10.3"}
         org.clojure/math.numeric-tower {:mvn/version "0.0.5"}
-        io.github.nextjournal/clerk {:mvn/version "0.3.233"}}
+        io.github.nextjournal/clerk {:mvn/version "0.4.305"}}
 
  :aliases
  {
@@ -28,7 +28,7 @@
                :main-opts   ["-m" "static-gen" "2021"]}
 
   :build {:deps {io.github.seancorfield/build-clj
-                 {:git/tag "v0.6.1" :git/sha "6e962ef"}}
+                 {:git/tag "v0.6.2" :git/sha "97c275a"}}
           :ns-default build}
 
   :test {:extra-paths ["test"]
