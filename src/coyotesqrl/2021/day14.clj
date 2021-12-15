@@ -105,32 +105,24 @@
                                     [[(first k) (first v)]
                                      [(first v) (last k)]]])))))
 
-(defn- +-nil
-  "Helper fn to add to a value or return it if nil"
-  [x n]
-  (if x
-    (+ x n)
-    n))
-
 (defn- step
   "Processes a single step of insertions, returning the updated frequency map."
   [in mappings]
   (reduce (fn [a [pair cnt]]
             (let [[left right] (get mappings pair)]
               (-> a
-                  (update left #(+-nil % cnt))
-                  (update right #(+-nil % cnt)))))
+                  (update left (fnil #(+ % cnt) 0))
+                  (update right (fnil #(+ % cnt) 0)))))
           {}
           in))
 
 (defn- run-steps
   "Processes n step-wise insertion operations."
   [in mappings n]
-  (loop [n n
-         in in]
-    (if (zero? n)
-      in
-      (recur (dec n) (step in mappings)))))
+  (->> in
+       (iterate #(step % mappings))
+       (take (inc n))
+       last))
 
 (defn- pair-freqs->letter-freqs
   "Using the frequencies of the pairs, determine the frequencies of each letter.
@@ -140,7 +132,7 @@
   the terminal letter."
   [in last-ltr]
   (reduce (fn [a [pair cnt]]
-            (update a (first pair) #(+-nil % cnt)))
+            (update a (first pair) (fnil #(+ % cnt) 0)))
           {last-ltr 1}
           in))
 
