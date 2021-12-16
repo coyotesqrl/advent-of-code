@@ -2,7 +2,9 @@
 ;; ### Day 13: Transparent Origami
 (ns coyotesqrl.2021.day13
   (:require [coyotesqrl.utils :as utils]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [nextjournal.clerk :as clerk]
+            [nextjournal.clerk.viewer :as v]))
 
 ;; ##### Input
 (defn- max-extents-easy [folds]
@@ -94,13 +96,32 @@
 ;;
 ;; **What code do you use to activate the infrared thermal imaging camera system?**
 
+(defn in->code-raw [in]
+  (reduce (fn [a v]
+            ((eval (read-string v)) a))
+          (:pts in)
+          (:folds in)))
+
 (defn in->code [in]
-  (let [folded (reduce (fn [a v]
-                         ((eval (read-string v)) a))
-                       (:pts in)
-                       (:folds in))]
-    (->> folded
-         (map #(map (fn [v] (if (zero? v) "\u2591" "\u2588")) %))
-         (map #(apply str %)))))
+  (->> in
+       in->code-raw
+       (map #(map (fn [v] (if (zero? v) "\u2591" "\u2588")) %))
+       (map #(apply str %))))
 
 (in->code day13-input)
+
+;; ##### Or, with Clerk Visualization
+(clerk/with-viewers
+  [{:pred number? :render-fn #(v/html [:div.inline-block {:style {:width            12 :height 12
+                                                                  :background-color (if (zero? %) :black :red)
+                                                                  :border-style     :solid
+                                                                  :border-color     :black
+                                                                  :border-width     1}}])}
+   {:pred list? :render-fn #(v/html (into [:div.flex.flex-col] (v/inspect-children %2) %1))}
+   {:pred #(and (vector? %) (not (map-entry? %))) :render-fn #(v/html (into [:div.flex.inline-flex] (v/inspect-children %2) %1))}]
+
+  (->> day13-input
+       in->code-raw
+       (map vec)
+       reverse
+       (into (list))))
