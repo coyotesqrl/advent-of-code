@@ -1,6 +1,7 @@
 (ns coyotesqrl.utils
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [nextjournal.clerk :as clerk]))
 
 (defn input->seq
   [filename]
@@ -14,3 +15,11 @@
         (-> (input->seq filename)
             first
             (str/split #","))))
+
+(defn answer-block [ans]
+  (clerk/html [:div {:style {:background-color :wheat
+                             :text-align       :center
+                             :border-color     :red
+                             :border-width     1
+                             :font-size        20}}
+               ans]))

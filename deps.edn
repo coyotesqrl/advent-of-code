@@ -6,7 +6,7 @@
  :aliases
  {
   :dev {:extra-paths ["dev" "test"]
-        :extra-deps {djblue/portal   {:mvn/version "0.18.2"}}}
+        :extra-deps {djblue/portal   {:mvn/version "0.19.0"}}}
 
   :kondo     {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.12.16"}}
               :main-opts  ["-m" "clj-kondo.main" "--lint" "src" "test"]}
