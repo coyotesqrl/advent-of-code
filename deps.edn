@@ -2,7 +2,7 @@
  :deps {org.clojure/clojure {:mvn/version "1.10.3"}
         org.clojure/math.numeric-tower {:mvn/version "0.0.5"}
         instaparse/instaparse {:mvn/version "1.4.10"}
-        io.github.nextjournal/clerk {:mvn/version "0.4.305"}}
+        io.github.nextjournal/clerk {:mvn/version "0.4.316"}}
 
  :aliases
  {

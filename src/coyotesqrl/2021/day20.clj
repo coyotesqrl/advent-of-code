@@ -1,5 +1,5 @@
 ;; ## Advent of Code 2021
-;; ### Day 10: Trench Map
+;; ### Day 20: Trench Map
 (ns coyotesqrl.2021.day20
   (:require [coyotesqrl.utils :as utils]))
 
