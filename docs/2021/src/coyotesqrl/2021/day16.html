@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="overflow-hidden min-h-screen"><head><title>Advent of Code 2021</title><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><script src="https://cdn.tailwindcss.com?plugins=typography" type="text/javascript"></script><script>tailwind.config = {
+  darkMode: "class",
+  content: ["./public/build/index.html", "./public/build/**/*.html", "./build/viewer.js"],
+  safelist: ['dark'],
+  theme: {
+    extend: {},
+    fontFamily: {
+      sans: ["Fira Sans", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+      serif: ["PT Serif", "serif"],
+      mono: ["Fira Mono", "monospace"]
+    }
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+</script><style type="text/tailwindcss">@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 18px;
+  }
+  @media (max-width: 600px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  .font-condensed { font-family: "Fira Sans Condensed", sans-serif; }
+  .font-inter     { font-family: "Inter", sans-serif; }
+  body {
+    @apply font-serif antialiased text-gray-900 sm:overscroll-y-none;
+  }
+  code, .code {
+    @apply font-mono text-sm text-gray-900 bg-slate-50 px-0.5 py-px rounded dark:bg-gray-800;
+  }
+  code::before, code::after { @apply content-none !important; }
+  h1, h3, h4, h5, h6 {
+    @apply font-condensed font-bold mt-8 first:mt-0;
+  }
+  h2 {
+    /*We cannot collapse margins due to nesting but we want to*/
+    /*keep the h2’s large margin visible*/
+    @apply font-condensed font-bold mt-8 first:mt-2;
+  }
+  h1 { @apply text-4xl; }
+  h2 { @apply text-3xl; }
+  h3 { @apply text-2xl; }
+
+  button { @apply focus:outline-none; }
+  strong { @apply font-bold; }
+  em     { @apply italic; }
+  pre    { @apply m-0 font-mono; }
+}
+
+/* Compatibility */
+/* --------------------------------------------------------------- */
+/* TODO: Verify which colors are in use and replace with Tailwind
+   colors accordingly. Move Nj-specific styles out of here. */
+
+:root {
+  --teal-color: #31afd0;
+  --dark-teal-color: #095960;
+  --near-black-color: #2e2e2c;
+  --red-color: #d64242;
+  --dark-blue-color: #1f2937;
+  --dark-blue-60-color: rgba(28, 42, 56, 0.6);
+  --gray-panel-color: rgba(239, 241, 245, 1.000);
+  --brand-color: var(--dark-blue-color);
+  --link-color: #5046e4;
+  --command-bar-selected-color: var(--teal-color);
+}
+
+.serif      { @apply font-serif; }
+.sans-serif { @apply font-sans; }
+.monospace  { @apply font-mono; }
+.inter      { @apply font-inter; }
+
+.border-color-teal { border-color: var(--dark-teal-color); }
+.teal { color: var(--teal-color); }
+.bg-dark-blue { background: var(--dark-blue-color); }
+.bg-dark-blue-60 { background: rgba(28, 42, 56, 0.6); }
+.bg-gray-panel { background: var(--gray-panel-color); }
+.text-dark-blue  { color: var(--dark-blue-color); }
+.text-dark-blue-60 { color: var(--dark-blue-60-color); }
+.border-dark-blue-30 { border-color: rgba(28, 42, 56, 0.6); }
+.text-brand { color: var(--dark-blue-color); }
+.bg-brand { background: var(--dark-blue-color); }
+.text-selected { color: white; }
+.red { color: var(--red-color); }
+
+/* Disclose Button */
+/* --------------------------------------------------------------- */
+
+.disclose {
+  @apply content-none border-solid cursor-pointer inline-block relative mr-[3px] top-[-2px] transition-all;
+  border-color: var(--near-black-color) transparent;
+  border-width: 6px 4px 0;
+}
+.disclose:hover {
+  border-color: var(--near-black-color) transparent;
+}
+.dark .disclose,
+.dark .disclose:hover {
+  border-color: white transparent;
+}
+.disclose.collapsed {
+  @apply rotate-[-90deg];
+}
+
+/* Layout */
+/* --------------------------------------------------------------- */
+
+.page {
+  @apply max-w-5xl mx-auto px-12 box-border flex-shrink-0;
+}
+.max-w-prose { @apply max-w-[46rem] !important; }
+.max-w-wide  { @apply max-w-3xl !important; }
+
+/* List Styles */
+/* --------------------------------------------------------------- */
+
+.task-list-item + .task-list-item,
+.viewer-markdown ul ul {
+  @apply mt-1 mb-0;
+}
+
+/* compact TOC */
+.viewer-markdown .toc ul {
+  list-style: none;
+  @apply my-1;
+}
+
+/* Code Viewer */
+/* --------------------------------------------------------------- */
+
+.viewer-code {
+  @apply font-mono bg-slate-100 rounded-sm text-sm overflow-x-auto dark:bg-gray-800;
+}
+.viewer-code .cm-content {
+  @apply py-4 px-8;
+}
+@media (min-width: 960px){
+  .viewer-notebook .viewer-code .cm-content {
+    @apply py-4 pl-12;
+  }
+}
+/* Don’t show focus outline when double-clicking cell in Safari */
+.cm-scroller { @apply focus:outline-none; }
+
+/* Syntax Highlighting */
+/* --------------------------------------------------------------- */
+
+.inspected-value { @apply text-xs font-mono leading-[1.25rem]; }
+.cmt-strong, .cmt-heading { @apply font-bold; }
+.cmt-italic, .cmt-emphasis { @apply italic; }
+.cmt-strikethrough { @apply line-through; }
+.cmt-link { @apply underline; }
+.untyped-value { @apply whitespace-nowrap; }
+
+.cm-editor, .cmt-default, .viewer-result {
+  @apply text-slate-800 dark:text-slate-300;
+}
+.cmt-keyword {
+  @apply text-purple-800 dark:text-pink-400;
+}
+.cmt-atom, .cmt-bool, .cmt-url, .cmt-contentSeparator, .cmt-labelName {
+  @apply text-blue-900 dark:text-blue-300;
+}
+.cmt-inserted, .cmt-literal {
+  @apply text-emerald-700 dark:text-emerald-200;
+}
+.cmt-string, .cmt-deleted {
+  @apply text-rose-700 dark:text-sky-300;
+}
+.cmt-italic.cmt-string {
+  @apply dark:text-sky-200;
+}
+.cmt-regexp, .cmt-escape {
+  @apply text-orange-500 dark:text-orange-300;
+}
+.cmt-variableName {
+  @apply text-blue-800 dark:text-sky-300;
+}
+.cmt-typeName, .cmt-namespace {
+  @apply text-emerald-600 dark:text-emerald-300;
+}
+.cmt-className {
+  @apply text-teal-600 dark:text-teal-200;
+}
+.cmt-macroName {
+  @apply text-teal-700 dark:text-teal-200;
+}
+.cmt-propertyName {
+  @apply text-blue-700 dark:text-blue-200;
+}
+.cmt-comment {
+  @apply text-slate-500 dark:text-slate-400;
+}
+.cmt-meta {
+  @apply text-slate-600 dark:text-slate-400;
+}
+.cmt-invalid {
+  @apply text-red-500 dark:text-red-300;
+}
+
+.result-data {
+  @apply font-mono text-sm overflow-x-auto whitespace-nowrap leading-normal;
+}
+.result-data::-webkit-scrollbar, .path-nav::-webkit-scrollbar {
+  @apply h-0;
+}
+.result-data-collapsed {
+  @apply whitespace-nowrap;
+}
+.result-data-field {
+  @apply ml-4 whitespace-nowrap;
+}
+.result-data-field-link{
+  @apply ml-4 whitespace-nowrap cursor-pointer;
+}
+.result-data-field-link:hover {
+  @apply text-black bg-black/5;
+}
+.result-text-empty {
+  color: rgba(0,0,0,.3);
+}
+.browsify-button:hover {
+  box-shadow: -2px 0 0 2px #edf2f7;
+}
+
+/* Prose */
+/* --------------------------------------------------------------- */
+
+.viewer-notebook,
+.viewer-markdown {
+  @apply prose
+    dark:prose-invert
+    prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+    dark:prose-a:text-blue-300
+    prose-p:mt-4 prose-p:leading-snug
+    prose-ol:mt-4 prose-ol:mb-6 prose-ol:leading-snug
+    prose-ul:mt-4 prose-ul:mb-6 prose-ul:leading-snug
+    prose-blockquote:mt-4 prose-blockquote:leading-snug
+    prose-hr:mt-6 prose-hr:border-t-2 prose-hr:border-solid prose-hr:border-slate-200
+    prose-figure:mt-4
+    prose-figcaption:mt-2 prose-figcaption:text-xs
+    prose-headings:mb-4
+    prose-table:mt-0
+    prose-th:mb-0
+    prose-img:my-0
+    prose-code:font-medium prose-code:bg-slate-100
+    max-w-none;
+}
+.viewer-markdown blockquote p:first-of-type:before,
+.viewer-markdown blockquote p:last-of-type:after {
+  @apply content-none;
+}
+
+/* Images */
+/* --------------------------------------------------------------- */
+
+
+/* Todo Lists */
+/* --------------------------------------------------------------- */
+
+.contains-task-list {
+  @apply pl-6 list-none;
+}
+.contains-task-list input[type="checkbox"] {
+  @apply appearance-none h-4 w-4 rounded border border-slate-200 relative mr-[0.3rem] ml-[-1.5rem] top-[0.15rem];
+}
+.contains-task-list input[type="checkbox"]:checked {
+  @apply border-indigo-600 bg-indigo-600 bg-no-repeat bg-contain;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+}
+
+/* Markdown TOC */
+/* --------------------------------------------------------------- */
+
+.viewer-markdown .toc      { @apply mt-4; }
+.viewer-markdown h1 + .toc { @apply mt-8; }
+
+.viewer-markdown .toc h1,
+.viewer-markdown .toc h2,
+.viewer-markdown .toc h3,
+.viewer-markdown .toc h4,
+.viewer-markdown .toc h5,
+.viewer-markdown .toc h6 {
+  @apply text-base text-indigo-600 font-sans my-0;
+}
+.viewer-markdown .toc a {
+  @apply text-indigo-600 font-normal no-underline hover:underline;
+}
+.viewer-markdown .toc li    { @apply m-0; }
+.viewer-markdown .toc ul ul { @apply pl-4; }
+
+/* Notebook Spacing */
+/* --------------------------------------------------------------- */
+
+.viewer-notebook { @apply py-16; }
+#clerk-static-app .viewer-notebook { @apply pt-[0.8rem] pb-16; }
+.viewer-markdown *:first-child:not(.viewer-code):not(li):not(h2) { @apply mt-0; }
+/*.viewer + .viewer { @apply mt-6; }*/
+.viewer + .viewer-result { @apply mt-0; }
+.viewer-code + .viewer-result { @apply mt-3; }
+.viewer-markdown + .viewer-markdown { @apply mt-0; }
+
+/* Sidenotes */
+/* --------------------------------------------------------------- */
+
+.sidenote-ref {
+  @apply top-[-3px] inline-flex justify-center items-center w-[18px] h-[18px]
+    rounded-full bg-slate-100 border border-slate-300 hover:bg-slate-200 hover:border-slate-300
+    m-0 ml-[4px] cursor-pointer;
+}
+.sidenote {
+  @apply hidden float-left clear-both mx-[2.5%] my-4 text-xs relative w-[95%];
+}
+.sidenote-ref.expanded + .sidenote {
+  @apply block;
+}
+@media (min-width: 860px) {
+  .sidenote-ref {
+    @apply top-[-0.5em] w-auto h-auto inline border-0 bg-transparent m-0 pointer-events-none;
+  }
+  .sidenote sup { @apply inline; }
+  .viewer-markdown .contains-sidenotes p { @apply max-w-[65%]; }
+  .viewer-markdown p .sidenote {
+    @apply mr-[-54%] mt-[0.2rem] w-1/2 float-right clear-right relative block;
+  }
+}
+.viewer-code + .viewer:not(.viewer-markdown):not(.viewer-code):not(.viewer-code-folded),
+.viewer-code-folded + .viewer:not(.viewer-markdown):not(.viewer-code):not(.viewer-code-folded),
+.viewer-result + .viewer-result {
+  @apply mt-2;
+}
+.viewer-code + .viewer-code-folded {
+  @apply mt-4;
+}
+.viewer-result {
+  @apply leading-tight mb-6;
+}
+.viewer-result figure {
+  @apply mt-0 !important;
+}
+@media (min-width: 768px) {
+  .devcard-desc > div {
+    @apply max-w-full m-0;
+  }
+}
+
+/* Command Palette */
+/* --------------------------------------------------------------- */
+
+.nj-commands-input {
+  @apply bg-transparent text-white;
+}
+.nj-context-menu-item:hover:not([disabled]) {
+  @apply cursor-pointer;
+  background-color: rgba(255,255,255,.14);
+}
+
+/* Devdocs */
+/* --------------------------------------------------------------- */
+
+.logo, .logo-white {
+  @apply block indent-[-999em];
+  background: url(/images/nextjournal-logo.svg) center center no-repeat;
+}
+.devdocs-body {
+  @apply font-inter;
+}
+
+/* Workarounds */
+/* --------------------------------------------------------------- */
+
+/* Fixes vega viewer resizing into infinity */
+.vega-embed .chart-wrapper { @apply h-auto !important; }
+/* fixes fraction separators being overridden by tw’s border-color */
+.katex * { @apply border-black; }
+</style><script src="https://storage.googleapis.com/nextjournal-cas-eu/assets/28ktYzexRpt9ZsXvxpxDRnu497pkEeZjEvXB1NMVzfEoPEgsbQXEyM3j5CEucNccte6QGnX1qQxHL2KHfoBRG2FN-viewer.js" type="text/javascript"></script><link href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&amp;family=Fira+Mono:wght@400;700&amp;family=Fira+Sans+Condensed:ital,wght@0,700;1,700&amp;family=Fira+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&amp;family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet" type="text/css"></head><body><div id="clerk-static-app"></div><script>let viewer = nextjournal.clerk.sci_viewer
+let app = nextjournal.clerk.static_app
+let opts = viewer.read_string("{:out-path \"docs/2021\", :bundle? false, :browse? false, :report-fn #object[nextjournal.clerk.builder$stdout_reporter 0x52327335 \"nextjournal.clerk.builder$stdout_reporter@52327335\"], :paths [\"src/coyotesqrl/2021/day05.clj\" \"src/coyotesqrl/2021/day21.clj\" \"src/coyotesqrl/2021/day11.clj\" \"src/coyotesqrl/2021/day01.clj\" \"src/coyotesqrl/2021/day14.clj\" \"src/coyotesqrl/2021/day08.clj\" \"src/coyotesqrl/2021/day09.clj\" \"src/coyotesqrl/2021/day02.clj\" \"src/coyotesqrl/2021/day13.clj\" \"src/coyotesqrl/2021/day17.clj\" \"src/coyotesqrl/2021/day18.clj\" \"src/coyotesqrl/2021/day07.clj\" \"src/coyotesqrl/2021/day18_grammar.clj\" \"src/coyotesqrl/2021/day10.clj\" \"src/coyotesqrl/2021/day03.clj\" \"src/coyotesqrl/2021/day16.clj\" \"src/coyotesqrl/2021/day04.clj\" \"src/coyotesqrl/2021/day06.clj\" \"src/coyotesqrl/2021/day20.clj\"], :path->doc {\"src/coyotesqrl/2021/day16.clj\" {:nextjournal/viewer {:name :clerk/notebook, :render-fn #viewer-fn v/notebook-viewer}, :nextjournal/value {:blocks [{:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h2\" {:id \"Advent%20of%20Code%202021\"} [:span \"Advent of Code 2021\"]] [\"h3\" {:id \"Day%2016:%20Packet%20Decoder\"} [:span \"Day 16: Packet Decoder\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(ns coyotesqrl.2021.day16\\n  (:require [coyotesqrl.utils :as utils]))\", :nextjournal/opts {:loc {:line 3, :column 1}}} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Input\"} [:span \"Input\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- line->bin [s]\\n  (->> s\\n       (map str)\\n       (map #(Integer/parseInt % 16))\\n       (map #(Integer/toBinaryString %))\\n       (map #(Integer/parseInt %))\\n       (map #(format \\\"%04d\\\" %))\\n       (apply str)))\", :nextjournal/opts {:loc {:line 7, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$line__GT_bin 0x1cb3ef9c \\\\\\\"coyotesqrl.2021.day16$line__GT_bin@1cb3ef9c\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(def day16-input (->> \\\"coyotesqrl/2021/day16-input.txt\\\"\\n                      utils/input->seq\\n                      first\\n                      line->bin))\", :nextjournal/opts {:loc {:line 16, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/quoted-string-viewer, :page-size 80}, :nextjournal/value [\\\"00100000010101000110110010001000000000100101001110001110000100110110000010010001\\\" {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 80, :path [], :total 5432, :offset 80, :replace-path [80]}}], :path [], :nextjournal/expanded-at {[] false, nil false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h4\" {:id \"Part%201\"} [:span \"Part 1\"]] [:p [:span \"As you leave the cave and reach open waters, you receive a transmission from the Elves back on\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"the ship.\"]] [:p [:span \"The transmission was sent using the Buoyancy Interchange Transmission System (BITS), a method of\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"packing numeric expressions into a binary sequence. Your submarine's computer has saved the\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"transmission in hexadecimal (your puzzle input).\"]] [:p [:span \"The first step of decoding the message is to convert the hexadecimal representation into binary.\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"Each character of hexadecimal corresponds to four bits of binary data.\"]] [:p [:span \"The BITS transmission contains a single packet at its outermost layer which itself contains many\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"other packets. The hexadecimal representation of this packet might encode a few extra 0 bits at\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"the end; these are not part of the transmission and should be ignored.\"]] [:p [:span \"Every packet begins with a standard header: the first three bits encode the packet version, and\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"the next three bits encode the packet type ID. These two values are numbers; all numbers encoded\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"in any packet are represented as binary with the most significant bit first. For example, a\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"version encoded as the binary sequence 100 represents the number 4.\"]] [:p [:span \"Packets with type ID 4 represent a literal value. Literal value packets encode a single binary\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"number. To do this, the binary number is padded with leading zeroes until its length is a\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"multiple of four bits, and then it is broken into groups of four bits. Each group is prefixed by\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"a 1 bit except the last group, which is prefixed by a 0 bit. These groups of five bits\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"immediately follow the packet header.\"]] [:p [:span \"Every other type of packet (any packet with a type ID other than 4) represent an operator that\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"performs some calculation on one or more sub-packets contained within. Right now, the specific\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"operations aren't important; focus on parsing the hierarchy of sub-packets.\"]] [:p [:span \"An operator packet contains one or more packets. To indicate which subsequent binary data\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"represents its sub-packets, an operator packet can use one of two modes indicated by the bit\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"immediately after the packet header; this is called the length type ID:\"]] [:ul [:li [:<> [:span \"If the length type ID is 0, then the next 15 bits are a number that represents the total length\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"in bits of the sub-packets contained by this packet.\"]]] [:li [:<> [:span \"If the length type ID is 1, then the next 11 bits are a number that represents the number of\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"sub-packets immediately contained by this packet.\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"Finally, after the length type ID bit and the 15-bit or 11-bit field, the sub-packets appear.\"]]]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(declare read-packet)\", :nextjournal/opts {:loc {:line 60, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_packet 0x4110a518 \\\\\\\"coyotesqrl.2021.day16$read_packet@4110a518\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(declare read-tape)\", :nextjournal/opts {:loc {:line 61, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_tape 0x3b485e9 \\\\\\\"coyotesqrl.2021.day16$read_tape@3b485e9\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- bits->num [bits]\\n  (Long/parseLong (apply str bits) 2))\", :nextjournal/opts {:loc {:line 63, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$bits__GT_num 0x55266bab \\\\\\\"coyotesqrl.2021.day16$bits__GT_num@55266bab\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- read-header [bits]\\n  (let [[ver typ] (->> bits\\n                       (partition 3)\\n                       (map #(apply str %))\\n                       (map #(Long/parseLong % 2))\\n                       (take 2))]\\n    {:version ver :type-id typ}))\", :nextjournal/opts {:loc {:line 66, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_header 0x56eab19c \\\\\\\"coyotesqrl.2021.day16$read_header@56eab19c\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- get-lit-bits [bits drop?]\\n  (reduce (fn [{:keys [lit bits]} v]\\n            (let [lit (str lit (apply str v))\\n                  bits (drop 5 bits)\\n                  end (= \\\\0 (first v))\\n                  bits (if (and drop? end)\\n                         (drop (quot (count lit) 5) bits)\\n                         bits)\\n                  acc {:lit lit :bits bits}]\\n              (if end\\n                (reduced acc)\\n                acc)))\\n          {:lit \\\"\\\" :bits bits}\\n          (partition 5 bits)))\", :nextjournal/opts {:loc {:line 74, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$get_lit_bits 0x1216f63c \\\\\\\"coyotesqrl.2021.day16$get_lit_bits@1216f63c\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn read-bit-length-subs\\n  [bits]\\n  (let [len (bits->num (take 15 bits))\\n        bits (drop 15 bits)\\n        sub-bits (take len bits)\\n        bits (drop len bits)]\\n    {:bits bits\\n     :sub-packets (read-tape {:bits sub-bits} false)}))\", :nextjournal/opts {:loc {:line 89, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_bit_length_subs 0x352aa25a \\\\\\\"coyotesqrl.2021.day16$read_bit_length_subs@352aa25a\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- read-n-packets [bits n]\\n  (loop [n n\\n         bits bits\\n         resp (vector)]\\n    (if (zero? n)\\n      {:bits bits :sub-packets resp}\\n      (let [{:keys [bits packet]} (read-packet {:bits bits} false)]\\n        (recur (dec n) bits (conj resp packet))))))\", :nextjournal/opts {:loc {:line 98, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_n_packets 0x53b7fc67 \\\\\\\"coyotesqrl.2021.day16$read_n_packets@53b7fc67\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn read-packet-num-subs\\n  [bits]\\n  (let [sub-cnt (bits->num (take 11 bits))\\n        bits (drop 11 bits)\\n        resp (read-n-packets bits sub-cnt)]\\n    resp))\", :nextjournal/opts {:loc {:line 107, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_packet_num_subs 0x5052c1dc \\\\\\\"coyotesqrl.2021.day16$read_packet_num_subs@5052c1dc\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn read-literal-value\\n  [packet bits outermost?]\\n  (let [{:keys [lit bits]} (get-lit-bits bits outermost?)\\n        lit (Long/parseLong (->> lit\\n                                 (partition 5)\\n                                 (map rest)\\n                                 flatten\\n                                 (apply str))\\n                            2)]\\n    {:bits bits\\n     :packet (assoc packet :lit-val lit)}))\", :nextjournal/opts {:loc {:line 114, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_literal_value 0x75506afc \\\\\\\"coyotesqrl.2021.day16$read_literal_value@75506afc\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn read-operator-envelope\\n  [packet bits]\\n  (let [env-type (first bits)\\n        bits     (rest bits)\\n        {:keys [sub-packets bits]} (if (= \\\\0 env-type)\\n                                     (read-bit-length-subs bits)\\n                                     (read-packet-num-subs bits))]\\n    {:bits bits\\n     :packet (assoc packet :sub-packets sub-packets)}))\", :nextjournal/opts {:loc {:line 126, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_operator_envelope 0x15882e7e \\\\\\\"coyotesqrl.2021.day16$read_operator_envelope@15882e7e\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn read-packet\\n  [{:keys [bits]} outermost?]\\n  (let [{:keys [type-id] :as packet} (read-header bits)\\n        bits (drop 6 bits)]\\n    (if (= 4 type-id)\\n      (read-literal-value packet bits outermost?)\\n      (read-operator-envelope packet bits))))\", :nextjournal/opts {:loc {:line 136, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_packet 0x4110a518 \\\\\\\"coyotesqrl.2021.day16$read_packet@4110a518\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Slight%20over-engineering\"} [:span \"Slight over-engineering\"]] [:p [:span \"I made an assumption early on that there would be multiple, top-level packets. Because of that,\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"I'd need a tape reader that iterated over packets. This does get used, by the\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:code [:span \"read-bit-length-subs\"]] [:span \" fn, but I likely could have solved that in an other way.\"]] [:p [:span \"It's particularly frustrating because I have this operation, but am not able (easliy) to\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"repurpose it for the \"] [:code [:span \"read-packet-num-subs\"]] [:span \" fn. More ugliness.\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn read-tape\\n  ([bits] (read-tape bits true))\\n  ([bits outermost?] (reduce (fn [a v]\\n                               (let [a (conj a (:packet v))]\\n                                 (if (or (empty? (:bits v)) (<= (count (:bits v)) 8))\\n                                   (reduced a)\\n                                   a)))\\n                             []\\n                             (iterate #(read-packet % outermost?) (read-packet bits outermost?)))))\", :nextjournal/opts {:loc {:line 151, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$read_tape 0x3b485e9 \\\\\\\"coyotesqrl.2021.day16$read_tape@3b485e9\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn add-version-nums [in]\\n  (reduce (fn [a {:keys [version sub-packets]}]\\n            (if sub-packets\\n              (+ a version (add-version-nums sub-packets))\\n              (+ a version)))\\n          0\\n          in))\", :nextjournal/opts {:loc {:line 161, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$add_version_nums 0x7930ac6c \\\\\\\"coyotesqrl.2021.day16$add_version_nums@7930ac6c\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:span \"Decode the structure of your hexadecimal-encoded BITS transmission; \"] [:strong [:span \"what do you get if you add\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"up the version numbers in all packets?\"]]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(->> (read-tape {:bits day16-input})\\n     add-version-nums\\n     utils/answer-block)\", :nextjournal/opts {:loc {:line 171, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:div {:style {:background-color :wheat, :text-align :center, :border-color :red, :border-width 1, :font-size 20}} 904], :path [], :nextjournal/expanded-at {[] false, nil false}}\", :nextjournal/viewer {:name :html}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:hr] [\"h4\" {:id \"Part%202\"} [:span \"Part 2\"]] [:p [:span \"Now that you have the structure of your transmission decoded, you can calculate the value of the\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"expression it represents.\"]] [:p [:span \"Literal values (\"] [:code [:span \"type ID 4\"]] [:span \") represent a single number as described above. The remaining type IDs\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"are more interesting:\"]] [:ul [:li [:<> [:span \"Packets with \"] [:code [:span \"type ID 0\"]] [:span \" are sum packets - their value is the sum of the values of their\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"sub-packets. If they only have a single sub-packet, their value is the value of the sub-packet.\"]]] [:li [:<> [:span \"Packets with \"] [:code [:span \"type ID 1\"]] [:span \" are product packets - their value is the result of multiplying together\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"the values of their sub-packets. If they only have a single sub-packet, their value is the value\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"of the sub-packet.\"]]] [:li [:<> [:span \"Packets with \"] [:code [:span \"type ID 2\"]] [:span \" are minimum packets - their value is the minimum of the values of their\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"sub-packets.\"]]] [:li [:<> [:span \"Packets with \"] [:code [:span \"type ID 3\"]] [:span \" are maximum packets - their value is the maximum of the values of their\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"sub-packets.\"]]] [:li [:<> [:span \"Packets with \"] [:code [:span \"type ID 5\"]] [:span \" are greater than packets - their value is 1 if the value of the first\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"sub-packet is greater than the value of the second sub-packet; otherwise, their value is 0. These\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"packets always have exactly two sub-packets.\"]]] [:li [:<> [:span \"Packets with \"] [:code [:span \"type ID 6\"]] [:span \" are less than packets - their value is 1 if the value of the first\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"sub-packet is less than the value of the second sub-packet; otherwise, their value is 0. These\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"packets always have exactly two sub-packets.\"]]] [:li [:<> [:span \"Packets with \"] [:code [:span \"type ID 7\"]] [:span \" are equal to packets - their value is 1 if the value of the first\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"sub-packet is equal to the value of the second sub-packet; otherwise, their value is 0. These\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"packets always have exactly two sub-packets.\"]]] [:li [:<> [:span \"Using these rules, you can now work out the value of the outermost packet in your BITS\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"transmission.\"]]]] [\"h5\" {:id \"Multi-method%20for%20operation%20types\"} [:span \"Multi-method for operation types\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmulti do-op :type-id)\", :nextjournal/opts {:loc {:line 205, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Helper%20functions%20to%20perform%20operations\"} [:span \"Helper functions to perform operations\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- perform-operation [packet op]\\n  (->> packet\\n       :sub-packets\\n       (map do-op)\\n       (apply op)))\", :nextjournal/opts {:loc {:line 208, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$perform_operation 0x49db5424 \\\\\\\"coyotesqrl.2021.day16$perform_operation@49db5424\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- perform-comparison [packet op]\\n  (let [[s1 s2] (:sub-packets packet)]\\n    (if (op (do-op s1) (do-op s2))\\n      1\\n      0)))\", :nextjournal/opts {:loc {:line 214, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day16$perform_comparison 0x1df468bf \\\\\\\"coyotesqrl.2021.day16$perform_comparison@1df468bf\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Value%20packet\"} [:span \"Value packet\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmethod do-op 4\\n  [packet]\\n  (:lit-val packet))\", :nextjournal/opts {:loc {:line 221, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Sum\"} [:span \"Sum\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmethod do-op 0\\n  [packet]\\n  (perform-operation packet +))\", :nextjournal/opts {:loc {:line 226, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Product\"} [:span \"Product\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmethod do-op 1\\n  [packet]\\n  (perform-operation packet *))\", :nextjournal/opts {:loc {:line 231, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Min\"} [:span \"Min\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmethod do-op 2\\n  [packet]\\n  (perform-operation packet min))\", :nextjournal/opts {:loc {:line 236, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Max\"} [:span \"Max\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmethod do-op 3\\n  [packet]\\n  (perform-operation packet max))\", :nextjournal/opts {:loc {:line 241, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"GT\"} [:span \"GT\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmethod do-op 5\\n  [packet]\\n  (perform-comparison packet >))\", :nextjournal/opts {:loc {:line 246, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"LT\"} [:span \"LT\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmethod do-op 6\\n  [packet]\\n  (perform-comparison packet <))\", :nextjournal/opts {:loc {:line 251, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Equal%20To\"} [:span \"Equal To\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defmethod do-op 7\\n  [packet]\\n  (perform-comparison packet =))\", :nextjournal/opts {:loc {:line 256, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[clojure.lang.MultiFn 0x3f2adeb7 \\\\\\\"clojure.lang.MultiFn@3f2adeb7\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:p [:strong [:span \"What do you get if you evaluate the expression represented by your hexadecimal-encoded BITS\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"transmission?\"]]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(->> (read-tape {:bits day16-input})\\n     (map do-op)\\n     utils/answer-block)\", :nextjournal/opts {:loc {:line 262, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:div {:style {:background-color :wheat, :text-align :center, :border-color :red, :border-width 1, :font-size 20}} (200476472872)], :path [], :nextjournal/expanded-at {[] false, nil false}}\", :nextjournal/viewer {:name :html}}, :path []}], :toc {:type :toc, :children [{:children [{:type :toc, :content [{:type :text, :text \"Advent of Code 2021\"}], :heading-level 2, :children [{:type :toc, :content [{:type :text, :text \"Day 16: Packet Decoder\"}], :heading-level 3, :children [{:children [{:type :toc, :content [{:type :text, :text \"Input\"}], :heading-level 5}], :type :toc} {:type :toc, :content [{:type :text, :text \"Part 1\"}], :heading-level 4, :children [{:type :toc, :content [{:type :text, :text \"Slight over-engineering\"}], :heading-level 5}]} {:type :toc, :content [{:type :text, :text \"Part 2\"}], :heading-level 4, :children [{:type :toc, :content [{:type :text, :text \"Multi-method for operation types\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"Helper functions to perform operations\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"Value packet\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"Sum\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"Product\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"Min\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"Max\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"GT\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"LT\"}], :heading-level 5} {:type :toc, :content [{:type :text, :text \"Equal To\"}], :heading-level 5}]}]}]}], :type :toc}]}, :toc-visibility false, :title \"Advent of Code 2021\", :scope {:namespace :coyotesqrl.2021.day16}}, :path [], :nextjournal/expanded-at {[] false}}}, :path->url {\"src/coyotesqrl/2021/day05.clj\" \"src/coyotesqrl/2021/day05.html\", \"src/coyotesqrl/2021/day21.clj\" \"src/coyotesqrl/2021/day21.html\", \"src/coyotesqrl/2021/day11.clj\" \"src/coyotesqrl/2021/day11.html\", \"src/coyotesqrl/2021/day01.clj\" \"src/coyotesqrl/2021/day01.html\", \"src/coyotesqrl/2021/day14.clj\" \"src/coyotesqrl/2021/day14.html\", \"src/coyotesqrl/2021/day08.clj\" \"src/coyotesqrl/2021/day08.html\", \"src/coyotesqrl/2021/day09.clj\" \"src/coyotesqrl/2021/day09.html\", \"src/coyotesqrl/2021/day02.clj\" \"src/coyotesqrl/2021/day02.html\", \"src/coyotesqrl/2021/day13.clj\" \"src/coyotesqrl/2021/day13.html\", \"src/coyotesqrl/2021/day17.clj\" \"src/coyotesqrl/2021/day17.html\", \"src/coyotesqrl/2021/day18.clj\" \"src/coyotesqrl/2021/day18.html\", \"src/coyotesqrl/2021/day07.clj\" \"src/coyotesqrl/2021/day07.html\", \"src/coyotesqrl/2021/day18_grammar.clj\" \"src/coyotesqrl/2021/day18_grammar.html\", \"src/coyotesqrl/2021/day10.clj\" \"src/coyotesqrl/2021/day10.html\", \"src/coyotesqrl/2021/day03.clj\" \"src/coyotesqrl/2021/day03.html\", \"src/coyotesqrl/2021/day16.clj\" \"src/coyotesqrl/2021/day16.html\", \"src/coyotesqrl/2021/day04.clj\" \"src/coyotesqrl/2021/day04.html\", \"src/coyotesqrl/2021/day06.clj\" \"src/coyotesqrl/2021/day06.html\", \"src/coyotesqrl/2021/day20.clj\" \"src/coyotesqrl/2021/day20.html\"}, :current-path \"src/coyotesqrl/2021/day16.clj\"}")
+app.init(opts)
+</script></body></html>

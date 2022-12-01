@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="overflow-hidden min-h-screen"><head><title>Advent of Code 2021</title><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><script src="https://cdn.tailwindcss.com?plugins=typography" type="text/javascript"></script><script>tailwind.config = {
+  darkMode: "class",
+  content: ["./public/build/index.html", "./public/build/**/*.html", "./build/viewer.js"],
+  safelist: ['dark'],
+  theme: {
+    extend: {},
+    fontFamily: {
+      sans: ["Fira Sans", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+      serif: ["PT Serif", "serif"],
+      mono: ["Fira Mono", "monospace"]
+    }
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+</script><style type="text/tailwindcss">@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 18px;
+  }
+  @media (max-width: 600px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  .font-condensed { font-family: "Fira Sans Condensed", sans-serif; }
+  .font-inter     { font-family: "Inter", sans-serif; }
+  body {
+    @apply font-serif antialiased text-gray-900 sm:overscroll-y-none;
+  }
+  code, .code {
+    @apply font-mono text-sm text-gray-900 bg-slate-50 px-0.5 py-px rounded dark:bg-gray-800;
+  }
+  code::before, code::after { @apply content-none !important; }
+  h1, h3, h4, h5, h6 {
+    @apply font-condensed font-bold mt-8 first:mt-0;
+  }
+  h2 {
+    /*We cannot collapse margins due to nesting but we want to*/
+    /*keep the h2’s large margin visible*/
+    @apply font-condensed font-bold mt-8 first:mt-2;
+  }
+  h1 { @apply text-4xl; }
+  h2 { @apply text-3xl; }
+  h3 { @apply text-2xl; }
+
+  button { @apply focus:outline-none; }
+  strong { @apply font-bold; }
+  em     { @apply italic; }
+  pre    { @apply m-0 font-mono; }
+}
+
+/* Compatibility */
+/* --------------------------------------------------------------- */
+/* TODO: Verify which colors are in use and replace with Tailwind
+   colors accordingly. Move Nj-specific styles out of here. */
+
+:root {
+  --teal-color: #31afd0;
+  --dark-teal-color: #095960;
+  --near-black-color: #2e2e2c;
+  --red-color: #d64242;
+  --dark-blue-color: #1f2937;
+  --dark-blue-60-color: rgba(28, 42, 56, 0.6);
+  --gray-panel-color: rgba(239, 241, 245, 1.000);
+  --brand-color: var(--dark-blue-color);
+  --link-color: #5046e4;
+  --command-bar-selected-color: var(--teal-color);
+}
+
+.serif      { @apply font-serif; }
+.sans-serif { @apply font-sans; }
+.monospace  { @apply font-mono; }
+.inter      { @apply font-inter; }
+
+.border-color-teal { border-color: var(--dark-teal-color); }
+.teal { color: var(--teal-color); }
+.bg-dark-blue { background: var(--dark-blue-color); }
+.bg-dark-blue-60 { background: rgba(28, 42, 56, 0.6); }
+.bg-gray-panel { background: var(--gray-panel-color); }
+.text-dark-blue  { color: var(--dark-blue-color); }
+.text-dark-blue-60 { color: var(--dark-blue-60-color); }
+.border-dark-blue-30 { border-color: rgba(28, 42, 56, 0.6); }
+.text-brand { color: var(--dark-blue-color); }
+.bg-brand { background: var(--dark-blue-color); }
+.text-selected { color: white; }
+.red { color: var(--red-color); }
+
+/* Disclose Button */
+/* --------------------------------------------------------------- */
+
+.disclose {
+  @apply content-none border-solid cursor-pointer inline-block relative mr-[3px] top-[-2px] transition-all;
+  border-color: var(--near-black-color) transparent;
+  border-width: 6px 4px 0;
+}
+.disclose:hover {
+  border-color: var(--near-black-color) transparent;
+}
+.dark .disclose,
+.dark .disclose:hover {
+  border-color: white transparent;
+}
+.disclose.collapsed {
+  @apply rotate-[-90deg];
+}
+
+/* Layout */
+/* --------------------------------------------------------------- */
+
+.page {
+  @apply max-w-5xl mx-auto px-12 box-border flex-shrink-0;
+}
+.max-w-prose { @apply max-w-[46rem] !important; }
+.max-w-wide  { @apply max-w-3xl !important; }
+
+/* List Styles */
+/* --------------------------------------------------------------- */
+
+.task-list-item + .task-list-item,
+.viewer-markdown ul ul {
+  @apply mt-1 mb-0;
+}
+
+/* compact TOC */
+.viewer-markdown .toc ul {
+  list-style: none;
+  @apply my-1;
+}
+
+/* Code Viewer */
+/* --------------------------------------------------------------- */
+
+.viewer-code {
+  @apply font-mono bg-slate-100 rounded-sm text-sm overflow-x-auto dark:bg-gray-800;
+}
+.viewer-code .cm-content {
+  @apply py-4 px-8;
+}
+@media (min-width: 960px){
+  .viewer-notebook .viewer-code .cm-content {
+    @apply py-4 pl-12;
+  }
+}
+/* Don’t show focus outline when double-clicking cell in Safari */
+.cm-scroller { @apply focus:outline-none; }
+
+/* Syntax Highlighting */
+/* --------------------------------------------------------------- */
+
+.inspected-value { @apply text-xs font-mono leading-[1.25rem]; }
+.cmt-strong, .cmt-heading { @apply font-bold; }
+.cmt-italic, .cmt-emphasis { @apply italic; }
+.cmt-strikethrough { @apply line-through; }
+.cmt-link { @apply underline; }
+.untyped-value { @apply whitespace-nowrap; }
+
+.cm-editor, .cmt-default, .viewer-result {
+  @apply text-slate-800 dark:text-slate-300;
+}
+.cmt-keyword {
+  @apply text-purple-800 dark:text-pink-400;
+}
+.cmt-atom, .cmt-bool, .cmt-url, .cmt-contentSeparator, .cmt-labelName {
+  @apply text-blue-900 dark:text-blue-300;
+}
+.cmt-inserted, .cmt-literal {
+  @apply text-emerald-700 dark:text-emerald-200;
+}
+.cmt-string, .cmt-deleted {
+  @apply text-rose-700 dark:text-sky-300;
+}
+.cmt-italic.cmt-string {
+  @apply dark:text-sky-200;
+}
+.cmt-regexp, .cmt-escape {
+  @apply text-orange-500 dark:text-orange-300;
+}
+.cmt-variableName {
+  @apply text-blue-800 dark:text-sky-300;
+}
+.cmt-typeName, .cmt-namespace {
+  @apply text-emerald-600 dark:text-emerald-300;
+}
+.cmt-className {
+  @apply text-teal-600 dark:text-teal-200;
+}
+.cmt-macroName {
+  @apply text-teal-700 dark:text-teal-200;
+}
+.cmt-propertyName {
+  @apply text-blue-700 dark:text-blue-200;
+}
+.cmt-comment {
+  @apply text-slate-500 dark:text-slate-400;
+}
+.cmt-meta {
+  @apply text-slate-600 dark:text-slate-400;
+}
+.cmt-invalid {
+  @apply text-red-500 dark:text-red-300;
+}
+
+.result-data {
+  @apply font-mono text-sm overflow-x-auto whitespace-nowrap leading-normal;
+}
+.result-data::-webkit-scrollbar, .path-nav::-webkit-scrollbar {
+  @apply h-0;
+}
+.result-data-collapsed {
+  @apply whitespace-nowrap;
+}
+.result-data-field {
+  @apply ml-4 whitespace-nowrap;
+}
+.result-data-field-link{
+  @apply ml-4 whitespace-nowrap cursor-pointer;
+}
+.result-data-field-link:hover {
+  @apply text-black bg-black/5;
+}
+.result-text-empty {
+  color: rgba(0,0,0,.3);
+}
+.browsify-button:hover {
+  box-shadow: -2px 0 0 2px #edf2f7;
+}
+
+/* Prose */
+/* --------------------------------------------------------------- */
+
+.viewer-notebook,
+.viewer-markdown {
+  @apply prose
+    dark:prose-invert
+    prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+    dark:prose-a:text-blue-300
+    prose-p:mt-4 prose-p:leading-snug
+    prose-ol:mt-4 prose-ol:mb-6 prose-ol:leading-snug
+    prose-ul:mt-4 prose-ul:mb-6 prose-ul:leading-snug
+    prose-blockquote:mt-4 prose-blockquote:leading-snug
+    prose-hr:mt-6 prose-hr:border-t-2 prose-hr:border-solid prose-hr:border-slate-200
+    prose-figure:mt-4
+    prose-figcaption:mt-2 prose-figcaption:text-xs
+    prose-headings:mb-4
+    prose-table:mt-0
+    prose-th:mb-0
+    prose-img:my-0
+    prose-code:font-medium prose-code:bg-slate-100
+    max-w-none;
+}
+.viewer-markdown blockquote p:first-of-type:before,
+.viewer-markdown blockquote p:last-of-type:after {
+  @apply content-none;
+}
+
+/* Images */
+/* --------------------------------------------------------------- */
+
+
+/* Todo Lists */
+/* --------------------------------------------------------------- */
+
+.contains-task-list {
+  @apply pl-6 list-none;
+}
+.contains-task-list input[type="checkbox"] {
+  @apply appearance-none h-4 w-4 rounded border border-slate-200 relative mr-[0.3rem] ml-[-1.5rem] top-[0.15rem];
+}
+.contains-task-list input[type="checkbox"]:checked {
+  @apply border-indigo-600 bg-indigo-600 bg-no-repeat bg-contain;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+}
+
+/* Markdown TOC */
+/* --------------------------------------------------------------- */
+
+.viewer-markdown .toc      { @apply mt-4; }
+.viewer-markdown h1 + .toc { @apply mt-8; }
+
+.viewer-markdown .toc h1,
+.viewer-markdown .toc h2,
+.viewer-markdown .toc h3,
+.viewer-markdown .toc h4,
+.viewer-markdown .toc h5,
+.viewer-markdown .toc h6 {
+  @apply text-base text-indigo-600 font-sans my-0;
+}
+.viewer-markdown .toc a {
+  @apply text-indigo-600 font-normal no-underline hover:underline;
+}
+.viewer-markdown .toc li    { @apply m-0; }
+.viewer-markdown .toc ul ul { @apply pl-4; }
+
+/* Notebook Spacing */
+/* --------------------------------------------------------------- */
+
+.viewer-notebook { @apply py-16; }
+#clerk-static-app .viewer-notebook { @apply pt-[0.8rem] pb-16; }
+.viewer-markdown *:first-child:not(.viewer-code):not(li):not(h2) { @apply mt-0; }
+/*.viewer + .viewer { @apply mt-6; }*/
+.viewer + .viewer-result { @apply mt-0; }
+.viewer-code + .viewer-result { @apply mt-3; }
+.viewer-markdown + .viewer-markdown { @apply mt-0; }
+
+/* Sidenotes */
+/* --------------------------------------------------------------- */
+
+.sidenote-ref {
+  @apply top-[-3px] inline-flex justify-center items-center w-[18px] h-[18px]
+    rounded-full bg-slate-100 border border-slate-300 hover:bg-slate-200 hover:border-slate-300
+    m-0 ml-[4px] cursor-pointer;
+}
+.sidenote {
+  @apply hidden float-left clear-both mx-[2.5%] my-4 text-xs relative w-[95%];
+}
+.sidenote-ref.expanded + .sidenote {
+  @apply block;
+}
+@media (min-width: 860px) {
+  .sidenote-ref {
+    @apply top-[-0.5em] w-auto h-auto inline border-0 bg-transparent m-0 pointer-events-none;
+  }
+  .sidenote sup { @apply inline; }
+  .viewer-markdown .contains-sidenotes p { @apply max-w-[65%]; }
+  .viewer-markdown p .sidenote {
+    @apply mr-[-54%] mt-[0.2rem] w-1/2 float-right clear-right relative block;
+  }
+}
+.viewer-code + .viewer:not(.viewer-markdown):not(.viewer-code):not(.viewer-code-folded),
+.viewer-code-folded + .viewer:not(.viewer-markdown):not(.viewer-code):not(.viewer-code-folded),
+.viewer-result + .viewer-result {
+  @apply mt-2;
+}
+.viewer-code + .viewer-code-folded {
+  @apply mt-4;
+}
+.viewer-result {
+  @apply leading-tight mb-6;
+}
+.viewer-result figure {
+  @apply mt-0 !important;
+}
+@media (min-width: 768px) {
+  .devcard-desc > div {
+    @apply max-w-full m-0;
+  }
+}
+
+/* Command Palette */
+/* --------------------------------------------------------------- */
+
+.nj-commands-input {
+  @apply bg-transparent text-white;
+}
+.nj-context-menu-item:hover:not([disabled]) {
+  @apply cursor-pointer;
+  background-color: rgba(255,255,255,.14);
+}
+
+/* Devdocs */
+/* --------------------------------------------------------------- */
+
+.logo, .logo-white {
+  @apply block indent-[-999em];
+  background: url(/images/nextjournal-logo.svg) center center no-repeat;
+}
+.devdocs-body {
+  @apply font-inter;
+}
+
+/* Workarounds */
+/* --------------------------------------------------------------- */
+
+/* Fixes vega viewer resizing into infinity */
+.vega-embed .chart-wrapper { @apply h-auto !important; }
+/* fixes fraction separators being overridden by tw’s border-color */
+.katex * { @apply border-black; }
+</style><script src="https://storage.googleapis.com/nextjournal-cas-eu/assets/28ktYzexRpt9ZsXvxpxDRnu497pkEeZjEvXB1NMVzfEoPEgsbQXEyM3j5CEucNccte6QGnX1qQxHL2KHfoBRG2FN-viewer.js" type="text/javascript"></script><link href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&amp;family=Fira+Mono:wght@400;700&amp;family=Fira+Sans+Condensed:ital,wght@0,700;1,700&amp;family=Fira+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&amp;family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet" type="text/css"></head><body><div id="clerk-static-app"></div><script>let viewer = nextjournal.clerk.sci_viewer
+let app = nextjournal.clerk.static_app
+let opts = viewer.read_string("{:out-path \"docs/2021\", :bundle? false, :browse? false, :report-fn #object[nextjournal.clerk.builder$stdout_reporter 0x52327335 \"nextjournal.clerk.builder$stdout_reporter@52327335\"], :paths [\"src/coyotesqrl/2021/day05.clj\" \"src/coyotesqrl/2021/day21.clj\" \"src/coyotesqrl/2021/day11.clj\" \"src/coyotesqrl/2021/day01.clj\" \"src/coyotesqrl/2021/day14.clj\" \"src/coyotesqrl/2021/day08.clj\" \"src/coyotesqrl/2021/day09.clj\" \"src/coyotesqrl/2021/day02.clj\" \"src/coyotesqrl/2021/day13.clj\" \"src/coyotesqrl/2021/day17.clj\" \"src/coyotesqrl/2021/day18.clj\" \"src/coyotesqrl/2021/day07.clj\" \"src/coyotesqrl/2021/day18_grammar.clj\" \"src/coyotesqrl/2021/day10.clj\" \"src/coyotesqrl/2021/day03.clj\" \"src/coyotesqrl/2021/day16.clj\" \"src/coyotesqrl/2021/day04.clj\" \"src/coyotesqrl/2021/day06.clj\" \"src/coyotesqrl/2021/day20.clj\"], :path->doc {\"src/coyotesqrl/2021/day09.clj\" {:nextjournal/viewer {:name :clerk/notebook, :render-fn #viewer-fn v/notebook-viewer}, :nextjournal/value {:blocks [{:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h2\" {:id \"Advent%20of%20Code%202021\"} [:span \"Advent of Code 2021\"]] [\"h3\" {:id \"Day%209\"} [:span \"Day 9\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(ns coyotesqrl.2021.day09\\n  (:require [coyotesqrl.utils :as utils]))\", :nextjournal/opts {:loc {:line 3, :column 1}}} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h5\" {:id \"Input\"} [:span \"Input\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- line->nums [l]\\n  (->> l\\n       (map str)\\n       (map #(Integer/parseInt %))))\", :nextjournal/opts {:loc {:line 7, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day09$line__GT_nums 0x5e44e188 \\\\\\\"coyotesqrl.2021.day09$line__GT_nums@5e44e188\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(def day9-input (map line->nums (utils/input->seq \\\"coyotesqrl/2021/day9-input.txt\\\")))\", :nextjournal/opts {:loc {:line 12, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [0 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [0 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [0 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [0 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [0 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [0 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [0 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [0 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [0 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [0 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [0 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [0 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [0 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [0 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [0], :total 100, :offset 20}}], :path [0]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [1 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [1 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [1 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [1 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [1 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [1 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [1 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [1 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [1 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [1 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [1 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [1 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [1 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [1 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [1], :total 100, :offset 20}}], :path [1]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [2 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [2 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [2 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [2 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [2 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [2 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [2 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [2 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [2 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [2 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [2 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [2 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [2 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [2 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [2 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [2 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [2 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [2 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [2 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [2 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [2], :total 100, :offset 20}}], :path [2]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [3 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [3 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [3 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [3 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [3 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [3 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [3 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [3 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [3 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [3 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [3 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [3 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [3 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [3 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [3 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [3 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [3 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [3 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [3 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [3 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [3], :total 100, :offset 20}}], :path [3]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [4 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [4 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [4 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [4 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [4 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [4 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [4 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [4 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [4 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [4 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [4 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [4 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [4 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [4 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [4 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [4 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [4 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [4 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [4 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [4 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [4], :total 100, :offset 20}}], :path [4]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [5 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [5 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [5 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [5 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [5 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [5 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [5 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [5 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [5 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [5 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [5 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [5 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [5 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [5 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [5 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [5 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [5 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [5 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [5 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [5 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [5], :total 100, :offset 20}}], :path [5]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [6 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [6 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [6 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [6 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [6 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [6 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [6 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [6 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [6 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [6 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [6 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [6 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [6 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [6 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [6 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [6 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [6 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [6 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [6 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [6 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [6], :total 100, :offset 20}}], :path [6]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [7 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [7 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [7 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [7 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [7 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [7 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [7 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [7 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [7 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [7 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [7 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [7 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [7 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [7 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [7 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [7 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [7 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [7 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [7 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [7 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [7], :total 100, :offset 20}}], :path [7]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [8 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [8 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [8 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [8 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [8 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [8 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [8 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [8 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [8 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [8 9]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [8 10]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [8 11]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [8 12]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [8 13]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [8 14]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [8 15]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [8 16]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [8 17]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [8 18]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [8 19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [8], :total 100, :offset 20}}], :path [8]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [9 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [9 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [9 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [9 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [9 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [9 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [9 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [9 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [9 8]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [9], :total 100, :offset 9}}], :path [9]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [10], :total 100, :offset 0}}], :path [10]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [11], :total 100, :offset 0}}], :path [11]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [12], :total 100, :offset 0}}], :path [12]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [13], :total 100, :offset 0}}], :path [13]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [14], :total 100, :offset 0}}], :path [14]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [15], :total 100, :offset 0}}], :path [15]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [16], :total 100, :offset 0}}], :path [16]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [17], :total 100, :offset 0}}], :path [17]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [18], :total 100, :offset 0}}], :path [18]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [19], :total 100, :offset 0}}], :path [19]} {:nextjournal/viewer {:name :elision, :render-fn #viewer-fn v/elision-viewer}, :nextjournal/value {:n 20, :path [], :total 100, :offset 20}}], :path [], :nextjournal/expanded-at {nil false, [8 8] false, [7 6] false, [8 7] false, [3 15] false, [8 11] false, [4] false, [9 8] false, [7 1] false, [5 19] false, [8 9] false, [7 12] false, [2 18] false, [8 18] false, [7] false, [4 3] false, [7 11] false, [2 2] false, [7 13] false, [0 0] false, [3 9] false, [4 12] false, [7 7] false, [2 8] false, [3 19] false, [1 0] false, [8 4] false, [2 3] false, [2 5] false, [7 2] false, [6 7] false, [7 4] false, [8 3] false, [0 6] false, [3 3] false, [6 19] false, [5 4] false, [0 19] false, [3 16] false, [5 10] false, [1 1] false, [6 3] false, [7 18] false, [10] false, [0 5] false, [3 4] false, [2 19] false, [13] false, [1 12] false, [7 3] false, [8 6] false, [1 15] false, [4 2] false, [0 18] false, [7 8] false, [3 12] false, [4 14] false, [6] false, [3 0] false, [9 0] false, [6 6] false, [9 6] false, [1 13] false, [] false, [6 13] false, [1 9] false, [0 13] false, [8 10] false, [5 3] false, [12] false, [9 3] false, [0 17] false, [9] false, [4 7] false, [4 10] false, [4 15] false, [0 15] false, [0 14] false, [3 13] false, [4 9] false, [1 10] false, [2 9] false, [6 5] false, [5 13] false, [8 19] false, [3 17] false, [5 14] false, [3] false, [4 11] false, [5 16] false, [0 9] false, [8 0] false, [4 1] false, [5 2] false, [2 13] false, [4 6] false, [1 4] false, [1 11] false, [5 7] false, [8 2] false, [4 18] false, [1 3] false, [4 19] false, [4 8] false, [8] false, [1 5] false, [1 8] false, [8 16] false, [1 7] false, [6 4] false, [1 18] false, [8 1] false, [2 12] false, [0] false, [16] false, [17] false, [0 3] false, [5 1] false, [6 1] false, [2 11] false, [6 14] false, [5 11] false, [1 16] false, [5 6] false, [5 8] false, [2 15] false, [8 15] false, [6 18] false, [8 13] false, [8 5] false, [0 7] false, [4 17] false, [3 18] false, [6 8] false, [6 11] false, [5 5] false, [7 9] false, [2 7] false, [5 17] false, [2 17] false, [14] false, [5 9] false, [2 4] false, [3 6] false, [5 15] false, [6 15] false, [5] false, [7 10] false, [9 2] false, [0 12] false, [4 5] false, [9 1] false, [9 7] false, [7 0] false, [0 16] false, [0 2] false, [6 9] false, [4 16] false, [3 14] false, [2 0] false, [0 4] false, [3 11] false, [0 10] false, [19] false, [3 1] false, [3 10] false, [1 17] false, [2 1] false, [6 17] false, [1 14] false, [9 5] false, [6 10] false, [3 8] false, [9 4] false, [7 14] false, [0 11] false, [6 12] false, [4 13] false, [1 6] false, [2 14] false, [4 4] false, [11] false, [15] false, [7 16] false, [3 7] false, [2 10] false, [7 5] false, [7 15] false, [2 6] false, [5 0] false, [2] false, [6 2] false, [8 14] false, [8 12] false, [6 0] false, [7 17] false, [1 2] false, [6 16] false, [7 19] false, [5 18] false, [2 16] false, [1] false, [3 5] false, [0 8] false, [5 12] false, [3 2] false, [18] false, [0 1] false, [1 19] false, [8 17] false, [4 0] false}}\"}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(map line->nums '(\\\"2199943210\\\" \\\"3987894921\\\" \\\"9856789892\\\" \\\"8767896789\\\" \\\"9899965678\\\"))\", :nextjournal/opts {:loc {:line 14, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [0 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [0 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [0 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [0 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [0 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [0 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [0 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 0, :path [0 9]}], :path [0]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 3, :path [1 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [1 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [1 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [1 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 4, :path [1 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [1 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [1 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 1, :path [1 9]}], :path [1]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [2 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [2 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [2 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [2 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [2 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [2 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [2 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [2 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [2 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 2, :path [2 9]}], :path [2]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [3 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [3 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [3 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [3 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [3 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [3 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [3 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [3 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [3 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [3 9]}], :path [3]} {:nextjournal/viewer {:render-fn #viewer-fn v/coll-viewer, :opening-paren \\\"(\\\", :closing-paren (\\\")\\\" \\\")\\\"), :page-size 20}, :nextjournal/value [{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [4 0]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [4 1]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [4 2]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [4 3]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 9, :path [4 4]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [4 5]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 5, :path [4 6]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 6, :path [4 7]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 7, :path [4 8]} {:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 8, :path [4 9]}], :path [4]}], :path [], :nextjournal/expanded-at {[4] false, [4 3] false, [2 2] false, [0 0] false, [3 9] false, [2 8] false, [1 0] false, [2 3] false, [2 5] false, [0 6] false, [3 3] false, [1 1] false, [0 5] false, [3 4] false, [4 2] false, [3 0] false, [] false, [1 9] false, [4 7] false, [4 9] false, [2 9] false, [3] false, [0 9] false, [4 1] false, [4 6] false, [1 4] false, [1 3] false, [4 8] false, [1 5] false, [1 8] false, [1 7] false, [0] false, [0 3] false, [0 7] false, [2 7] false, [2 4] false, [3 6] false, [4 5] false, [0 2] false, [2 0] false, [0 4] false, [3 1] false, [2 1] false, [3 8] false, [1 6] false, [4 4] false, [3 7] false, [2 6] false, [2] false, [1 2] false, [1] false, [3 5] false, [0 8] false, [3 2] false, [0 1] false, [4 0] false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [\"h4\" {:id \"Part%201\"} [:span \"Part 1\"]]]} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- row->min-map [r]\\n  (:mins (reduce-kv (fn [{:keys [prev mins] :as a} k v]\\n                      (assoc (if (or (nil? prev) (< v prev))\\n                               (assoc a :mins (-> mins\\n                                                  (dissoc (dec k))\\n                                                  (assoc k v)))\\n                               a)\\n                             :prev v))\\n                    {:prev nil :mins {}}\\n                    (vec r))))\", :nextjournal/opts {:loc {:line 18, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day09$row__GT_min_map 0x6b406b77 \\\\\\\"coyotesqrl.2021.day09$row__GT_min_map@6b406b77\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- input->min-rows [in]\\n  (->> in\\n       (map row->min-map)))\", :nextjournal/opts {:loc {:line 29, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day09$input__GT_min_rows 0x14cef937 \\\\\\\"coyotesqrl.2021.day09$input__GT_min_rows@14cef937\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn- min-vertical? [n row col in]\\n  (let [col-neighbor (fn [f] (tap> {:row row :col col :f-row (f row)}) (nth (nth in (f row)) col))\\n        up           (if (zero? row)\\n                       9\\n                       (col-neighbor dec))\\n        down         (if (>= row (dec (count in)))\\n                       9\\n                       (col-neighbor inc))]\\n    (and (< n up) (< n down))))\", :nextjournal/opts {:loc {:line 33, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day09$min_vertical_QMARK_ 0x73333a \\\\\\\"coyotesqrl.2021.day09$min_vertical_QMARK_@73333a\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(defn input->mins [in]\\n  (let [min-rows (vec (input->min-rows in))]\\n    (tap> {:min-rows min-rows})\\n    (reduce-kv (fn [row-a row-k row-v]\\n                 (into row-a (reduce (fn [col-a [col-k col-v]]\\n                                       (if (min-vertical? col-v row-k col-k in)\\n                                         (conj col-a col-v)\\n                                         col-a))\\n                                     []\\n                                     row-v)))\\n               []\\n               min-rows)))\", :nextjournal/opts {:loc {:line 43, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:name :read+inspect, :render-fn #viewer-fn (fn [x] (try (v/html [v/inspect (v/read-string x)]) (catch js/Error _e (v/unreadable-edn-viewer x))))}, :nextjournal/value \\\"#object[coyotesqrl.2021.day09$input__GT_mins 0x7942da1d \\\\\\\"coyotesqrl.2021.day09$input__GT_mins@7942da1d\\\\\\\"]\\\", :path [], :nextjournal/expanded-at {[] false}}\", :nextjournal/viewer {:name :read+inspect}}, :path []} {:nextjournal/viewer {:name :code, :render-fn #viewer-fn v/code-viewer}, :nextjournal/value \"(->> (input->mins day9-input)\\n     (map inc)\\n     (apply +))\", :nextjournal/opts {:loc {:line 56, :column 1}}} {:nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn v/result-viewer}, :nextjournal/value {:nextjournal/edn \"{:nextjournal/viewer {:render-fn #viewer-fn v/number-viewer}, :nextjournal/value 448, :path [], :nextjournal/expanded-at {[] false}}\"}, :path []} {:nextjournal/viewer {:name :html-, :render-fn #viewer-fn v/html}, :nextjournal/value [:div.viewer-markdown [:hr] [\"h4\" {:id \"Part%202\"} [:span \"Part 2\"]] [:p [:span \"Flood Filling\"]] [:p [:em [:span \"FAILURE\"]]] [:p [:span \"Look. So I know \"] [:em [:span \"what\"]] [:span \" must be done. I just can't seem to successfully implement it. The recursive\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"solution is out of the question (thanks JVM, for still not having TCO) and I've tried,\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"unsuccessfully, several attempts at iterative solutions that all come up short. I did manage a\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"naive solution that was able to solve for the sample data because it doesn't have particularly\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"gnarly polygons. It's almost certainly convex polygons, where the convex vertices are to the\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"south and west that are giving me problems. I tried to account for that, thinking I could do\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"multiple runs, but then I started getting stuck in weird corners again.\"]] [:p [:span \"I even found a Clojure flood-filling library on GH that worked just fine...until I tried to run\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"that against the input data.\"]] [:p [:span \"I know this is probably not that difficult to solve...and yet.\"]] [:p [:span \"It's five hours away from the Day 11 drop; I haven't even looked at Day 10, and I'm mentally\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"drained. I think I'm taking a day or two away before I tackle D10, D11, and maybe even D12.\"]] [:p [:span \"Oh, and for giggles, should anyone have a 3d printer they can program, this could honestly be\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"solved more easily (for me) by literally flood filling:\"]] [:ol [:li [:<> [:span \"Print the grid, with nothing where there's a \"] [:code [:span \"9\"]]]] [:li [:<> [:span \"Take the resulting output and separate into the flooded basins\"]]] [:li [:<> [:span \"Weigh; sort; take three heaviest\"]]]] [:p [:span \"The last step, multiplication, requires either being able to determine how many blocks are in\"] [#viewer-eval v/inspect-presented {:nextjournal/viewer {:name :html, :render-fn #viewer-fn v/html}, :nextjournal/value [:span \" \"]}] [:span \"each of the segments or knowing what the weight for each grid is.\"]]]}], :toc {:type :toc, :children [{:children [{:type :toc, :content [{:type :text, :text \"Advent of Code 2021\"}], :heading-level 2, :children [{:type :toc, :content [{:type :text, :text \"Day 9\"}], :heading-level 3, :children [{:children [{:type :toc, :content [{:type :text, :text \"Input\"}], :heading-level 5}], :type :toc} {:type :toc, :content [{:type :text, :text \"Part 1\"}], :heading-level 4} {:type :toc, :content [{:type :text, :text \"Part 2\"}], :heading-level 4}]}]}], :type :toc}]}, :toc-visibility false, :title \"Advent of Code 2021\", :scope {:namespace :coyotesqrl.2021.day09}}, :path [], :nextjournal/expanded-at {[] false}}}, :path->url {\"src/coyotesqrl/2021/day05.clj\" \"src/coyotesqrl/2021/day05.html\", \"src/coyotesqrl/2021/day21.clj\" \"src/coyotesqrl/2021/day21.html\", \"src/coyotesqrl/2021/day11.clj\" \"src/coyotesqrl/2021/day11.html\", \"src/coyotesqrl/2021/day01.clj\" \"src/coyotesqrl/2021/day01.html\", \"src/coyotesqrl/2021/day14.clj\" \"src/coyotesqrl/2021/day14.html\", \"src/coyotesqrl/2021/day08.clj\" \"src/coyotesqrl/2021/day08.html\", \"src/coyotesqrl/2021/day09.clj\" \"src/coyotesqrl/2021/day09.html\", \"src/coyotesqrl/2021/day02.clj\" \"src/coyotesqrl/2021/day02.html\", \"src/coyotesqrl/2021/day13.clj\" \"src/coyotesqrl/2021/day13.html\", \"src/coyotesqrl/2021/day17.clj\" \"src/coyotesqrl/2021/day17.html\", \"src/coyotesqrl/2021/day18.clj\" \"src/coyotesqrl/2021/day18.html\", \"src/coyotesqrl/2021/day07.clj\" \"src/coyotesqrl/2021/day07.html\", \"src/coyotesqrl/2021/day18_grammar.clj\" \"src/coyotesqrl/2021/day18_grammar.html\", \"src/coyotesqrl/2021/day10.clj\" \"src/coyotesqrl/2021/day10.html\", \"src/coyotesqrl/2021/day03.clj\" \"src/coyotesqrl/2021/day03.html\", \"src/coyotesqrl/2021/day16.clj\" \"src/coyotesqrl/2021/day16.html\", \"src/coyotesqrl/2021/day04.clj\" \"src/coyotesqrl/2021/day04.html\", \"src/coyotesqrl/2021/day06.clj\" \"src/coyotesqrl/2021/day06.html\", \"src/coyotesqrl/2021/day20.clj\" \"src/coyotesqrl/2021/day20.html\"}, :current-path \"src/coyotesqrl/2021/day09.clj\"}")
+app.init(opts)
+</script></body></html>

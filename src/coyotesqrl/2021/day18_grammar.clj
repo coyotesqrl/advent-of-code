@@ -1,14 +1,11 @@
 (ns coyotesqrl.2021.day18-grammar
-  (:require [coyotesqrl.utils :as utils]
-            [instaparse.core :as insta]
-
+  (:require [instaparse.core :as insta]
             [clojure.test :refer [deftest is]]))
-
 
 ;     exp-left  = exp-ll-neigh? (<ob> <ob> <ob> <ob> exp-ll <sp> exp-lr <cb>) <sp> exp-lr-addend?
 (def explicit-grammar
   (->>
-    "
+   "
     input = pair | add
     pair = <ob> (x-number | pair) <sp> (x-number | pair) <cb>
     add = pair <plus> pair
@@ -36,7 +33,7 @@
     number = #'[0-9]'
     bignumber = #'[0-9][0-9]'
     plus = #'[+]'"
-    insta/parser))
+   insta/parser))
 
 (defn exp-left [a b c d]
   (let [x (if a (+ a b) 0)
@@ -52,6 +49,7 @@
 (defn snail+ [l r]
   (conj (conj [] l) r))
 
+#_{:clj-kondo/ignore [:unresolved-var]}
 (->> (explicit-grammar "[[[[0,7],4],[15,[0,13]]],[1,1]]")
      (insta/transform {:number    #(Integer/parseInt %)
                        :bignumber n->sp

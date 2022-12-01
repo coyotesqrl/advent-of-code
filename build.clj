@@ -12,7 +12,7 @@
   (-> opts
       (assoc :lib lib :version version)
       (bb/run-task [:outdated])
-      (bb/run-task [:eastwood])
+      #_(bb/run-task [:eastwood])
       (bb/run-task [:kondo])
       (bb/run-task [:fmt-check])))
 

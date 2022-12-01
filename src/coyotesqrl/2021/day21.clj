@@ -27,15 +27,15 @@
           (range 6 Integer/MAX_VALUE 9)))
 
 (utils/answer-block
-  (deterministic-game 2 10))
+ (deterministic-game 2 10))
 
 ;; ---
 ;; #### Part 2
 ;
 ; 4 - 444356092776315
 ; 8 - 341960390180808
-(defn- steps-to-21 [s]
-  ())
+#_(defn- steps-to-21 [s]
+    ())
 
 ; Count of permutations (steps) for single player to get to between 21 and 21+9
 ; Same for second starting position

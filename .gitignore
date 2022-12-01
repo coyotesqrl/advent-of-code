@@ -26,3 +26,6 @@
 /classes
 /target
 /.cache/
+/.clerk/cache/
+/.portal/
+/.clj-kondo/

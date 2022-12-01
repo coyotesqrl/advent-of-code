@@ -9,8 +9,8 @@
                    file-seq
                    (filter #(.isFile %))
                    (map #(.getPath %)))]
-    (clerk/build-static-app! {:paths    paths
-                              :out-path (format "docs/%d" year)})))
+    (clerk/build! {:paths    paths
+                   :out-path (format "docs/%d" year)})))
 
 (defn -main [& years]
   (try (doseq [year years]

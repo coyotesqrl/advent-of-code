@@ -117,8 +117,8 @@
                                                                   :border-style     :solid
                                                                   :border-color     :black
                                                                   :border-width     1}}])}
-   {:pred list? :render-fn #(v/html (into [:div.flex.flex-col] (v/inspect-children %2) %1))}
-   {:pred #(and (vector? %) (not (map-entry? %))) :render-fn #(v/html (into [:div.flex.inline-flex] (v/inspect-children %2) %1))}]
+   {:pred list? :render-fn #(v/html (into [:div.flex.flex-col] ('v/inspect-children %2) %1))}
+   {:pred #(and (vector? %) (not (map-entry? %))) :render-fn #(v/html (into [:div.flex.inline-flex] ('v/inspect-children %2) %1))}]
 
   (->> day13-input
        in->code-raw
