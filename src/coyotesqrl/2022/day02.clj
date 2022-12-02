@@ -48,17 +48,16 @@
 ;;
 ;;**What would your total score be if everything goes exactly according to your strategy guide?**
 
-;; | Letter | Interpretation | Value |
-;; | --- | --- | --- |
-;; | A/X | Rock | 1 |
-;; | B/Y | Paper | 2 |
-;; | C/Z | Scissors | 3 |
-;;
-;; | Outcome | Value |
-;; | --- | --- |
-;; | Lose | 0 |
-;; | Draw | 3 |
-;; | Win  | 6 |
+^{::clerk/visibility {:code :hide}}
+(clerk/table (clerk/use-headers '(("Letter" "Interpretation" "Value")
+                                  ("A/X" "Rock" 1)
+                                  ("B/Y" "Paper" 2)
+                                  ("C/Z" "Scissors" 3))))
+^{::clerk/visibility {:code :hide}}
+(clerk/table (clerk/use-headers '(("Outcome" "Value")
+                                  ("lose" 0)
+                                  ("draw" 3)
+                                  ("win" 6))))
 
 ;; Being explicit with scoring results
 ^{::clerk/visibility {:result :hide}}
@@ -99,15 +98,18 @@
 ;; according to your strategy guide?**
 
 ;; Updating to the correct interpretation of the rules
-;; | Letter | Interpretation | Value |
-;; | --- | --- | --- |
-;; | A | Rock | 1 |
-;; | B | Paper | 2 |
-;; | C | Scissors | 3 |
-;;
-;; * X Lose
-;; * Y Draw
-;; * Z Win
+^{::clerk/visibility {:code :hide}}
+(clerk/table (clerk/use-headers '(("Letter" "Interpretation" "Value")
+                                  ("A" "Rock" 1)
+                                  ("B" "Paper" 2)
+                                  ("C" "Scissors" 3))))
+
+^{::clerk/visibility {:code :hide}}
+(clerk/table (clerk/use-headers '(("Letter" "Interpretation")
+                                  ("X" "Lose")
+                                  ("Y" "Draw")
+                                  ("Z" "Win"))))
+
 ^{::clerk/visibility {:result :hide}}
 (def round-map-corrected
   {"A X" (+ 0 3)
