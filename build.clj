@@ -19,5 +19,5 @@
 (defn ci "Run the static tools, tests, and generate static site pages." [opts]
   (-> opts
       static
-      (bb/run-tests)
+      #_(bb/run-tests)
       (bb/run-task [:static-gen])))
