@@ -1,7 +1,7 @@
 ;; ## Advent of Code 2022
-;; ### Day 2
+;; ### [Day 2](https://adventofcode.com/2022/day/2)
+;; [Link to code](https://github.com/coyotesqrl/advent-of-code/blob/main/src/coyotesqrl/2022/day02.clj)
 
-^{:nextjournal.clerk/visibility :hide-ns}
 (ns coyotesqrl.2022.day02
   (:require [coyotesqrl.utils :as utils]
             [nextjournal.clerk :as clerk]))

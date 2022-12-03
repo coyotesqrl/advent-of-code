@@ -1,7 +1,7 @@
 ;; ## Advent of Code 2022
-;; ### Day 3
+;; ### [Day 3](https://adventofcode.com/2022/day/3)
+;; [Link to code](https://github.com/coyotesqrl/advent-of-code/blob/main/src/coyotesqrl/2022/day03.clj)
 
-^{:nextjournal.clerk/visibility :hide-ns}
 (ns coyotesqrl.2022.day03
   (:require [clojure.set :as set]
             [coyotesqrl.utils :as utils]
