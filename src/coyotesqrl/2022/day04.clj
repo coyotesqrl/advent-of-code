@@ -92,7 +92,9 @@
 (->> assignments
      (map gen-limits)
      (filter contains-range?)
-     (count))
+     (count)
+     (utils/answer-block))
+
 ;; ---
 ;; #### Part 2
 ;;It seems like there is still quite a bit of duplicate work planned. Instead, the Elves would like to know the number
@@ -117,4 +119,5 @@
 (->> assignments
      (map gen-limits)
      (filter overlaps?)
-     (count))
+     (count)
+     (utils/answer-block))

@@ -21,5 +21,6 @@
                              :text-align       :center
                              :border-color     :red
                              :border-width     1
+                             :color           :black
                              :font-size        20}}
                ans]))

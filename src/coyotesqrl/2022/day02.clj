@@ -75,7 +75,8 @@
 (->> "coyotesqrl/2022/day2-input.txt"
      (utils/input->seq)
      (map round-map)
-     (apply +))
+     (apply +)
+     (utils/answer-block))
 
 ;; ---
 ;; #### Part 2
@@ -125,4 +126,5 @@
 (->> "coyotesqrl/2022/day2-input.txt"
      (utils/input->seq)
      (map round-map-corrected)
-     (apply +))
+     (apply +)
+     (utils/answer-block))

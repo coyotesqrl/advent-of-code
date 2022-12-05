@@ -64,7 +64,9 @@
          (apply max-key second))))
 
 (->> (calories)
-     (top-calories))
+     (top-calories)
+     (second)
+     (utils/answer-block))
 
 ;; ---
 ;; ### Part 2
@@ -94,8 +96,10 @@
          (apply +))))
 
 (->> (calories)
-     (top-n-elves 3))
+     (top-n-elves 3)
+     (utils/answer-block))
 
 ;; And, just for giggles...let's redo part 1 with the new `top-n-elves` fn.
 (->> (calories)
-     (top-n-elves 1))
+     (top-n-elves 1)
+     (utils/answer-block))

@@ -145,17 +145,16 @@
 
 ^{::clerk/visibility {:result :hide}}
 (defn- perform-ops [st ops single-crate?]
-  (loop [st  st
-         ops ops]
-    (if (empty? ops)
-      st
-      (recur (perform-op st (first ops) single-crate?) (rest ops)))))
+  (reduce (fn [a v] (perform-op a v single-crate?))
+          st
+          ops))
 
 (let [st  (prep-stack)
       ops (parse-ops)]
   (->> (perform-ops st ops true)
        (map first)
-       (apply str)))
+       (apply str)
+       (utils/answer-block)))
 
 ;; ---
 ;; #### Part 2
@@ -217,4 +216,5 @@
       ops (parse-ops)]
   (->> (perform-ops st ops false)
        (map first)
-       (apply str)))
+       (apply str)
+       (utils/answer-block)))

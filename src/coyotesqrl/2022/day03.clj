@@ -70,12 +70,11 @@
       (<= (int \a) item-int (int \z)) (- item-int 96)
       (<= (int \A) item-int (int \Z)) (- item-int 38))))
 
-(transduce (comp (map common-element)
-                 (map first)
-                 (map to-int))
-           +
-           rucksacks)
-
+(utils/answer-block (transduce (comp (map common-element)
+                                     (map first)
+                                     (map to-int))
+                               +
+                               rucksacks))
 ;; ---
 ;; #### Part 2
 ;;As you finish identifying the misplaced items, the Elves come to you with another issue.
@@ -120,8 +119,8 @@
                      (utils/input->seq)
                      (partition 3)))
 
-(transduce (comp (map common-element)
-                 (map first)
-                 (map to-int))
-           +
-           elf-groups)
+(utils/answer-block (transduce (comp (map common-element)
+                                     (map first)
+                                     (map to-int))
+                               +
+                               elf-groups))
