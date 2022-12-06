@@ -3,6 +3,12 @@
             [clojure.string :as str]
             [nextjournal.clerk :as clerk]))
 
+(defn input->str
+  [filename]
+  (->> (io/resource filename)
+       io/reader
+       slurp))
+
 (defn input->seq
   [filename]
   (->> (io/resource filename)
