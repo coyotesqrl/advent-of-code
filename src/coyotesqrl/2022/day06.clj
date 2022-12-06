@@ -91,3 +91,17 @@
 ;; ---
 
 (find-marker input 14)
+
+;; ---
+;; #### Updated next morning with core functions I completely forgot about...
+^{::clerk/visibility {:result :hide}}
+(defn- find-marker2 [input len]
+  (->> input
+       (partition len 1)
+       (keep-indexed #(when (apply distinct? %2) %1))
+       (first)
+       (+ len)
+       (utils/answer-block)))
+
+(find-marker2 input 4)
+(find-marker2 input 14)
