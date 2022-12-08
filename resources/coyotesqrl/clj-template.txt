@@ -1,0 +1,18 @@
+;; ## Advent of Code {{year}}
+;; ### [Day {{day}}](https://adventofcode.com/{{year}}/day/{{day}})
+;; [Link to code](https://github.com/coyotesqrl/advent-of-code/blob/main/src/coyotesqrl/{{year}}/day0{{day}}.clj)
+
+(ns coyotesqrl.{{year}}.day{{day|number-format:%02d}}
+  (:require
+   [clojure.string :as str]
+   [coyotesqrl.utils :as utils]
+   [nextjournal.clerk :as clerk]))
+
+;; #### Part 1
+
+;; ---
+
+;; ---
+;; #### Part 2
+
+;; ---
