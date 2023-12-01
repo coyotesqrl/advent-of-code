@@ -9,7 +9,7 @@
   (p/open {:launcher :intellij}))
 
 (defn clerk
-  ([] (clerk ["src/coyotesqrl/2022/"]))
+  ([] (clerk ["src/coyotesqrl/2023/"]))
   ([paths] (clerk/serve! {:browse? true :watch-paths paths})))
 
 (defn clerk-show [y d]
