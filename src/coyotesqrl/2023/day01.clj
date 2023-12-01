@@ -52,8 +52,8 @@
 ^{::clerk/visibility {:result :hide}}
 (defn get-two-digit-string [s]
   (let [numbers '("1" "2" "3" "4" "5" "6" "7" "8" "9"
-                  "one" "two" "three" "four" "five" "six"
-                  "seven" "eight" "nine")
+                      "one" "two" "three" "four" "five" "six"
+                      "seven" "eight" "nine")
         indexes (for [n numbers]
                   [{(str/index-of s n) n} {(str/last-index-of s n) n}])]
     (str (get-number indexes first min) (get-number indexes second max))))
