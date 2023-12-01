@@ -17,9 +17,9 @@
 
 ;; For the first part, we just need to get the first/last digits in the input strings to generate two-digit numbers
 ;; to be summed. In the case where there is only one digit, it is both first and last.
-(let [digits (set "0123456789")]
+(let [digits (set "123456789")]
   (->> part1-input
-       (map (fn [l] (keep digits l)))
+       (map #(keep digits %))
        (map (juxt first last))
        (map #(apply str %))
        (map parse-long)
