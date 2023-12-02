@@ -1,5 +1,6 @@
 (ns user
   (:require [clojure.java.io :as io]
+            [hato.client :as hc]
             [nextjournal.clerk :as clerk]
             [portal.api :as p]
             [selmer.parser :as sp]))
@@ -17,8 +18,11 @@
 
 (defn init-day [y d]
   (let [out-ns (format "src/coyotesqrl/%d/day%02d.clj" y d)
-        #_#_input  (format "resources/coyotesqrl/%d/day%d-input.txt" y d)]
+        input  (format "resources/coyotesqrl/%d/day%d-input.txt" y d)]
     (spit out-ns (-> "coyotesqrl/clj-template.txt"
                      (io/resource)
                      (sp/render-file {:year y :day d})))
-    #_(spit input (slurp (format "https://adventofcode.com/%d/day/%d/input" y d)))))
+    (spit input (-> "https://adventofcode.com/%d/day/%d/input"
+                    (format y d)
+                    (hc/get {:headers {"Cookie" (str "session=" (System/getenv "AOC_SESSION"))}})
+                    :body))))

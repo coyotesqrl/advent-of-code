@@ -16,6 +16,12 @@
       (bb/run-task [:kondo])
       (bb/run-task [:fmt-check])))
 
+(defn fmt-fix
+  "Fix code formatted incorrectly"
+  [opts]
+  (-> opts
+      (bb/run-task [:fmt-fix])))
+
 (defn ci "Run the static tools, tests, and generate static site pages." [opts]
   (-> opts
       static
