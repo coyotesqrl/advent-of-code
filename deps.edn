@@ -8,7 +8,7 @@
  :aliases
  {
   :dev        {:extra-paths ["dev" "test"]
-               :extra-deps  {djblue/portal {:mvn/version "0.49.1"}
+               :extra-deps  {djblue/portal {:mvn/version "0.50.0"}
                              selmer/selmer {:mvn/version "1.12.59"}}}
 
   :kondo      {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2023.10.20"}}
