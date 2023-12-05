@@ -25,5 +25,5 @@
     (spit input (-> "https://adventofcode.com/%d/day/%d/input"
                     (format y d)
                     (hc/get {:headers {"Cookie" (str "session=" (System/getenv "AOC_SESSION"))
-                                       :user-agent "R.A. Porter - coyotesqrl@gmail.com"}})
+                                       "user-agent" "R.A. Porter - coyotesqrl@gmail.com"}})
                     :body))))
