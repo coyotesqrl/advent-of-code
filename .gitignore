@@ -29,3 +29,6 @@
 /.clerk/cache/
 /.portal/
 /.clj-kondo/
+
+# Per FAQ, should not be committing input data
+/resources/coyotesqrl/20*/
