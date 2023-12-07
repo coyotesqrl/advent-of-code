@@ -93,6 +93,7 @@
 
 ^{::clerk/visibility {:result :hide}}
 (defn get-range-location [[seed-start len] maps]
+  (prn seed-start)
   (reduce (fn [a v]
             (min a (get-location v maps)))
           (Long/MAX_VALUE)
@@ -103,7 +104,7 @@
       seed-ranges (get-seed-ranges input)
       maps  (get-all-maps input)]
   (->> seed-ranges
-       (map #(get-range-location % maps))
+       (pmap #(get-range-location % maps))
        (apply min)
        (utils/answer-block)))
 
