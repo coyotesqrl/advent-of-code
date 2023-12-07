@@ -22,6 +22,11 @@
             first
             (str/split #","))))
 
+(defn extract-numbers [s]
+  (->> (str/split s #"\s")
+       (remove str/blank?)
+       (map parse-long)))
+
 (defn answer-block [ans]
   (clerk/html [:div {:style {:background-color :wheat
                              :text-align       :center
