@@ -100,13 +100,13 @@
           (range seed-start (+ seed-start len))))
 
 ;; ##### Solve
-(let [input part1-input
-      seed-ranges (get-seed-ranges input)
-      maps  (get-all-maps input)]
-  (->> seed-ranges
-       (pmap #(get-range-location % maps))
-       (apply min)
-       (utils/answer-block)))
+#_(let [input part1-input
+        seed-ranges (get-seed-ranges input)
+        maps  (get-all-maps input)]
+    (->> seed-ranges
+         (pmap #(get-range-location % maps))
+         (apply min)
+         (utils/answer-block)))
 
 (comment
   (let [seed-ranges (get-seed-ranges sample)
