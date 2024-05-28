@@ -1,4 +1,5 @@
 ;; ## Advent of Code 2023
+;; This means nothing
 ;; ### [Day 1](https://adventofcode.com/2023/day/1)
 ;; [Link to code](https://github.com/coyotesqrl/advent-of-code/blob/main/src/coyotesqrl/2023/day01.clj)
 
