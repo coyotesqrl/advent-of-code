@@ -10,6 +10,7 @@
                    (filter #(.isFile %))
                    (map #(.getPath %)))]
     (clerk/build! {:paths    paths
+                   :package :single-file
                    :out-path (format "docs/%d" year)})))
 
 (defn -main [& years]

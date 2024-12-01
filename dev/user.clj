@@ -2,15 +2,10 @@
   (:require [clojure.java.io :as io]
             [hato.client :as hc]
             [nextjournal.clerk :as clerk]
-            [portal.api :as p]
             [selmer.parser :as sp]))
 
-(defn portal []
-  (add-tap #'portal.api/submit)
-  (p/open {:launcher :intellij}))
-
 (defn clerk
-  ([] (clerk ["src/coyotesqrl/2023/"]))
+  ([] (clerk ["src/coyotesqrl/2024/"]))
   ([paths] (clerk/serve! {:browse? true :watch-paths paths :port 7778})))
 
 (defn clerk-show [y d]
